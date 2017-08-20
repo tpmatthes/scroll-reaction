@@ -1,0 +1,38 @@
+#section-1, [data-scroll-reaction='section-1'] {
+	--custom-color: #5DBEDD;
+}
+
+#section-2, [data-scroll-reaction='section-2'] {
+	--custom-color: #DD635D;
+}
+
+#section-3, [data-scroll-reaction='section-3'] {
+	--custom-color: #5DDD94;
+}
+
+#section-4, [data-scroll-reaction='section-4'] {
+	--custom-color: #DD975D;
+}
+
+#section-5, [data-scroll-reaction='section-5'] {
+	--custom-color: #975DDD;
+}
+
+section {
+	background-color: var(--custom-color);
+}
+
+a:hover, a:active, a:focus {
+	color: var(--custom-color);
+}
+
+a.is-active {
+	border-bottom-color: var(--custom-color);
+}
+
+@media (max-width: 800px) {
+	nav {
+		height: 2.5rem;
+		font-size: 0.75rem;
+	}
+}

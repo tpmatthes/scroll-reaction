@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Example #1: simple navigation | scroll-reaction.js</title>
+
+	<link href="css/1.css" rel="stylesheet">
+</head>
+<body>
+
+<nav>
+	<!-- The value of the data attribute should match the id of the element we want to target -->
+	<a href="#start" data-scroll-reaction="start">Start</a>
+	<a href="#section-1" data-scroll-reaction="section-1">Section 1</a>
+	<a href="#section-2" data-scroll-reaction="section-2">Section 2</a>
+	<!-- We don't have to use any naming convention -->
+	<a href="#my-custom-id" data-scroll-reaction="my-custom-id">Section 3</a>
+</nav>
+
+<header id="start">
+	<div>
+		<h1>Example #1: simple navigation</h1>
+		Scroll down!
+	</div>
+</header>
+
+<section id="section-1">
+	<h2>#1</h2>
+</section>
+
+<section id="section-2">
+	<h2>#2</h2>
+</section>
+
+<section id="my-custom-id">
+	<h2>#3</h2>
+</section>
+
+<script src="../src/scroll-reaction.js" type="text/javascript"></script>
+<script>
+// It is useful to create a public variable, if we want to use the ScrollReaction API later
+var scrollEffects = new ScrollReaction({
+	// The navigation is fixed at the top of the window
+	// We will configure the offset to match the fixed height (in pixels)
+	offset: 80,
+});
+scrollEffects.init();
+
+// However, if we don't want to use the API, we can just write:
+// new ScrollReaction({offset: 80}).init();
+</script>
+
+</body>
+</html>

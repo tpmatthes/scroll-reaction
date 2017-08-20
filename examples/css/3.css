@@ -1,0 +1,14 @@
+a.was-active {
+	opacity: 0.5;
+}
+
+#progress {
+	background-color: #5DDD94;
+	border-top: 2px solid #FFFFFF;
+	bottom: 0;
+	height: 10px;
+	left: 0;
+	position: fixed;
+	transition: width 0.2s;
+	z-index: 3;
+}
