@@ -56,7 +56,7 @@ If the user scrolls past one of our sections, the class of the anchor tag change
 
 It’s entirely up to you to add styling to those classes, Scroll-Reaction.js only assigns them.
 
-Be sure to have a look at the examples to learn more about Scroll-Reaction.js
+Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn more about Scroll-Reaction.js
 
 # Options (and default values)
 ``` js
@@ -97,11 +97,11 @@ var scrollEffects = new ScrollReaction({
 ```
 
 # Help
-Be sure to have a look at the examples to learn more about Scroll-Magis.js
+Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn more about Scroll-Magis.js
 
-If you run into trouble, feel free to post your questions in the issues section.
+If you run into trouble, feel free to post your questions in the [issues section](https://github.com/tpmatthes/scroll-reaction/pulls).
 
 # License
-Scroll-Reaction.js is licensed under the MIT license.
+Scroll-Reaction.js is licensed under the [MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).
 
 Copyright 2017 Tim-Patrick Matthes

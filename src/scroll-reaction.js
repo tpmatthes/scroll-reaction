@@ -2,7 +2,7 @@
  * ScrollReaction 1.0.0 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  *
- * Learn more: https://github.com/tpmatthes
+ * Learn more: https://github.com/tpmatthes/scroll-reaction
  *
  * MIT License
  */
