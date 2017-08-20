@@ -13,37 +13,50 @@ window.ScrollReaction = (function() {
 	// Default config, may be overriden by passing a config object to the constructor function
 	// Example: new ScrollReaction({callback: customCallback, offset: -80})
 	var config = {
-		// This attribute is used to find listener elements
-		// Add it to any element, e.g. <a data-scroll-reaction="section-1" ...>
-		// The value should match the id of the emitter element, e.g. <section id="section-1" ...>
+		/* This attribute is used to find listener elements
+		 * Add it to any element, e.g. <a data-scroll-reaction="section-1" ...>
+		 * The value should match the id of the emitter element, e.g. <section id="section-1" ...>
+		 */
 		attribute: 'data-scroll-reaction',
-		// These classes will be added to all listener elements when the user scrolls to a linked emitter element
-		// The first class will be added when the user reaches an emitter element
-		// The second class will be added when the user has scrolled past an emitter element
-		// If you pass an empty string for one of these class names, no class will be added
+
+		/* These classes will be added to listener elements
+		 * The first class will be added when the user reaches an emitter element
+		 * The second class will be added when the user has scrolled past an emitter element
+		 * If you pass an empty string for one of these class names, no class will be added
+		 */
 		classes: {
 			isActive: 'is-active',
 			wasActive: 'was-active',
 		},
-		// This function will be called when the user is scrolling or resizing the window
-		// The vertical scroll position and the status (0-100%) will be passed to the callback function as arguments
+
+		/* This function will be called when the user is scrolling or resizing the window
+		 * The vertical scroll position and the status (0-100%) will be passed as arguments
+		 */
 		callback: null,
-		// This offset will be subtracted from the vertical position of any emitter element
-		// If your listener element should receive its class earlier (scrolling down), pass a higher value
+
+		/* This offset will be subtracted from the vertical position of any emitter element
+		 * If your listener element should receive its class earlier (scrolling down), pass a higher value
+		 */
 		offset: 5,
-		// If you enable this option, the base offset will be calculated from the height of an element
-		// This option accepts any query selector, e.g. '#navigation' or 'nav'
-		// The first element, which matches the given selector, will be used
-		// If you use both offset options, the base offset will be added to this
+
+		/* If you enable this option, the base offset will be calculated from the height of an element
+		 * This option accepts any query selector, e.g. '#navigation' or 'nav'
+		 * The first element, which matches the given selector, will be used
+		 * If you use both offset options, the base offset will be added to this
+		 */
 		offsetFrom: null,
-		// The update method will get called at a limited rate on scroll (by default 20 times per second)
-		// However, the max rate can be changed, because it limits the FPS in a custom callback
+
+		/* The update method will get called at a limited rate on scroll (by default 20 times per second)
+		 * However, the max rate can be changed, because it limits the FPS in a custom callback
+		 */
 		throttleDelay: 50,
-		// The last emitter element may be "unreachable" on bigger screens
-		// An emitter is only triggered when the user scrolls past it (- configured offset)
-		// However, if the user scrolls to the bottom of the page, the last emitter will be activated automatically
-		// If the listener element should receive its class earlier (scrolling down), pass a higher value
-		// Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+
+		/* The last emitter element may be "unreachable" on bigger screens
+		 * An emitter is only triggered when the user scrolls past it (- configured offset)
+		 * However, if the user scrolls to the bottom, the last emitter will be activated automatically
+		 * If the listener element should receive its class earlier (scrolling down), pass a higher value
+		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+		 */
 		windowBottomOffset: 20,
 	};
 
