@@ -42,6 +42,7 @@ a:hover, a:active, a:focus {
 	color: #5DBEDD;
 }
 
+/* This class will be added by Scroll-Magic.js */
 a.is-active {
 	border-bottom-color: #5DBEDD;
 }

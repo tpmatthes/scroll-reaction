@@ -1,3 +1,4 @@
+/* We will assign a custom color to each section */
 #section-1, [data-scroll-reaction='section-1'] {
 	--custom-color: #5DBEDD;
 }
@@ -26,13 +27,16 @@ a:hover, a:active, a:focus {
 	color: var(--custom-color);
 }
 
+/* This class will be added by Scroll-Magic.js */
 a.is-active {
+	/* The color depends on the variable */
 	border-bottom-color: var(--custom-color);
 }
 
 @media (max-width: 800px) {
+	/* The offset is calculated from the height of the navigation (see config) */
 	nav {
-		height: 2.5rem;
 		font-size: 0.75rem;
+		height: 2.5rem;
 	}
 }
