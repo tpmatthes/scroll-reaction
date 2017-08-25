@@ -124,10 +124,12 @@ var scrollEffects = new ScrollReaction({
 });
 ```
 
-# Help
+# Help and browser support
 Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn more about *Scroll-Reaction.js*.
 
 If you run into trouble, feel free to post your questions in the [issues section](https://github.com/tpmatthes/scroll-reaction/issues).
+
+*Scroll-Reaction.js* supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5) and [classList](http://caniuse.com/#feat=classlist)). It doesn’t rely on ES6 features, so it should support a fair amount of older browsers as well – even Internet Explorer 10+.
 
 # License
 *Scroll-Reaction.js* is licensed under the [MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).
