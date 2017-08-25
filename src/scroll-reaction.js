@@ -1,5 +1,5 @@
 /*!
- * ScrollReaction 1.0.0 by Tim-Patrick Matthes
+ * ScrollReaction 1.0.1 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  *
  * Learn more: https://github.com/tpmatthes/scroll-reaction
@@ -267,7 +267,7 @@ window.ScrollReaction = (function() {
 		// Return a function, because this function is used as a callback
 		return function() {
 			// Save current time
-			var now = +(new Date());
+			var now = Date.now();
 			// Defer the callback function if debounce mode is activated
 			// Or throttle the function if necessary
 			if (debounce || (lastTime && now < lastTime + interval)) {
