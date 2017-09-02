@@ -117,6 +117,8 @@ window.ScrollReaction = (function() {
 			var foundListeners = document.querySelectorAll('[' + config.attribute + ']');
 			// Lookup array to check if an emitter is already registered
 			var emittersLookup = [];
+			// Required for using the correct scope in the smooth scroll event listeners
+			var self = this, scrollTo = this.scrollTo;
 
 			// Abort if no listener elements have been found
 			if (foundListeners.length == 0) {
@@ -131,9 +133,24 @@ window.ScrollReaction = (function() {
 			for (var i = 0; i < foundListeners.length; i++) {
 				// Find the corresponding emitter element (by ID)
 				var emitterId = foundListeners[i].getAttribute(config.attribute);
-				var emitter = document.getElementById(emitterId);
+				var emitter = emitterId ? document.getElementById(emitterId) : null;
 				// Variables for new listener and emitter objects
 				var newListener, newEmitter;
+				// Href attribute of the listener element
+				var listenerHref = foundListeners[i].getAttribute('href');
+
+				// If smooth scrolling is enabled and the listener has a page anchor: Add an event listener
+				if (config.smoothScroll && listenerHref && (listenerHref.indexOf('#') == 0)) {
+					// An existing emitter isn't required, because a "scroll to top" link should be possible
+					// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
+					foundListeners[i].addEventListener('click', function(event) {
+						// Prevent default behaviour (jumping to #link)
+						event.preventDefault();
+						// Scroll to the desired location
+						// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
+						scrollTo.call(self, this.getAttribute(config.attribute));
+					});
+				}
 
 				// Does the emitter element exist?
 				// Listeners without linked emitters aren't allowed (they would be useless)
