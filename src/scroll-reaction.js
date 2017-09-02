@@ -1,5 +1,5 @@
 /*!
- * ScrollReaction 1.0.1 by Tim-Patrick Matthes
+ * ScrollReaction 1.1.0 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  *
  * Learn more: https://github.com/tpmatthes/scroll-reaction
@@ -248,6 +248,36 @@ window.ScrollReaction = (function() {
 			if (typeof config.callback === 'function') {
 				// Pass the scroll position and the status as an argument
 				config.callback(this.position, this.status);
+			}
+		},
+
+		/**
+		 * Scrolls to an element with a given ID or scrolls to top, if no ID is specified
+		 * @param {string} id: ID of the element the browser should scroll to [optional]
+		 */
+		scrollTo: function(id) {
+			// Scroll to top by default
+			var endPosition = 0;
+			// Find the corresponding element
+			var element = (id) ? document.getElementById(id) : null;
+
+			// Does the element exist?
+			if (element) {
+				// Get the position of the element, relative to the current position
+				// Subtract the configured offset and add one extra pixel to trigger linked listeners
+				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
+			}
+
+			// Does the browser support smooth scroll behaviour?
+			try {
+				// Scroll to the position - smoothly!
+				window.scrollTo({top: endPosition, left: 0, behavior: 'smooth'});
+			}
+			catch(error) {
+				// Show warning message in console
+				console.warn('Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling in scroll-reaction.js');
+				// Scroll to the position - not smoothly, but it works
+				window.scrollTo(0, endPosition);
 			}
 		}
 	};
