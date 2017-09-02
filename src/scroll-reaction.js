@@ -46,6 +46,13 @@ window.ScrollReaction = (function() {
 		 */
 		offsetFrom: null,
 
+		/* Should smooth scrolling be enabled for all listener elements?
+		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
+		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
+		 * You probably don't want to enable this option, if you use custom event listeners for your links
+		 */
+		smoothScroll: false,
+
 		/* The update method will get called at a limited rate on scroll (by default 20 times per second)
 		 * However, the max rate can be changed, because it limits the FPS in a custom callback
 		 */
@@ -58,13 +65,6 @@ window.ScrollReaction = (function() {
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
 		 */
 		windowBottomOffset: 20,
-
-		/* Should smooth scrolling be enabled for all listener elements?
-		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
-		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
-		 * You probably don't want to enable this option, if you use custom event listeners for your links
-		 */
-		smoothScroll: false,
 	};
 
 	// Arrays with all elements affected by this script
