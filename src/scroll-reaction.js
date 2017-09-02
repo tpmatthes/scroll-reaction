@@ -58,6 +58,13 @@ window.ScrollReaction = (function() {
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
 		 */
 		windowBottomOffset: 20,
+
+		/* Should smooth scrolling be enabled for all listener elements?
+		 * If you don't use a polyfill for smooth scroll behavior, you should disable this option
+		 * The script will show a warning in the console if the browser doesn't support scroll behavior
+		 * You should disable this option as well, if you want to use custom event listeners on your anchor tags
+		 */
+		smoothScroll: true,
 	};
 
 	// Arrays with all elements affected by this script
@@ -266,16 +273,31 @@ window.ScrollReaction = (function() {
 				// Get the position of the element, relative to the current position
 				// Subtract the configured offset and add one extra pixel to trigger linked listeners
 				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
+				// Focus the element for screen readers (accessibility)
+				element.focus();
+				// Does the browser support the history API?
+				if (window.history.replaceState) {
+					// Change the hash in the history
+					window.history.replaceState(null, null, '#' + id);
+				}
 			}
 
-			// Does the browser support smooth scroll behaviour?
-			try {
-				// Scroll to the position - smoothly!
-				window.scrollTo({top: endPosition, left: 0, behavior: 'smooth'});
-			}
-			catch(error) {
-				// Show warning message in console
-				console.warn('Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling in scroll-reaction.js');
+			// Is smooth scrolling enabled?
+			if (config.smoothScroll) {
+				// Does the browser support smooth scroll behaviour?
+				// Is isn't possible to check for browser support by using a simple if statement
+				// The new API extends the old scrollTo function
+				try {
+					// Scroll to the position - smoothly!
+					window.scrollTo({top: endPosition, left: 0, behavior: 'smooth'});
+				}
+				catch(error) {
+					console.warn('Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling for scroll-reaction.js');
+					// Jump to the position
+					window.scrollTo(0, endPosition);
+				}
+			// Else: Smooth Scrolling is disabled
+			} else {
 				// Scroll to the position - not smoothly, but it works
 				window.scrollTo(0, endPosition);
 			}
