@@ -299,11 +299,12 @@ window.ScrollReaction = (function() {
 				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
 				// Focus the element for screen readers (accessibility)
 				element.focus();
-				// Does the browser support the history API?
-				if (window.history.replaceState) {
-					// Change the hash in the history
-					window.history.replaceState(null, null, '#' + id);
-				}
+			}
+
+			// Does the browser support the history API?
+			if (window.history.replaceState) {
+				// Change the hash in the history
+				window.history.replaceState(null, null, '#' + id);
 			}
 
 			// Is smooth scrolling enabled?
