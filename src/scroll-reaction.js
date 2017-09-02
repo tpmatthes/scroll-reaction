@@ -60,11 +60,11 @@ window.ScrollReaction = (function() {
 		windowBottomOffset: 20,
 
 		/* Should smooth scrolling be enabled for all listener elements?
-		 * If you don't use a polyfill for smooth scroll behavior, you should disable this option
-		 * The script will show a warning in the console if the browser doesn't support scroll behavior
-		 * You should disable this option as well, if you want to use custom event listeners on your anchor tags
+		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
+		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
+		 * You probably don't want to enable this option, if you use custom event listeners for your links
 		 */
-		smoothScroll: true,
+		smoothScroll: false,
 	};
 
 	// Arrays with all elements affected by this script
