@@ -139,7 +139,11 @@ window.ScrollReaction = (function() {
 				// Listeners without linked emitters aren't allowed (they would be useless)
 				if (emitter) {
 					// Create a new emitter object
-					newEmitter = {element: emitter, isActive: false, wasActive: false};
+					newEmitter = {
+						element: emitter,
+						isActive: false,
+						wasActive: false
+					};
 
 					// Add the emitter object to the corresponding array, only if it doesn't exist yet
 					// It is possible to have multiple listeners linked to the same emitter
@@ -150,7 +154,10 @@ window.ScrollReaction = (function() {
 					}
 
 					// Create a new listener object (refers to the current emitter)
-					newListener = {element: foundListeners[i], emitterIndex: emittersLookup.indexOf(emitterId)};
+					newListener = {
+						element: foundListeners[i],
+						emitterIndex: emittersLookup.indexOf(emitterId)
+					};
 
 					// Add the listener object to the corresponding array
 					listeners.push(newListener);
@@ -158,7 +165,7 @@ window.ScrollReaction = (function() {
 			}
 
 			// Should the offset be calculated from an elements height?
-			if (typeof config.offsetFrom === 'string') {
+			if (config.offsetFrom) {
 				// Find the element based on the configured selector
 				offsetFromElement = document.querySelector(config.offsetFrom);
 			// Else: the offset is simply an option
@@ -251,7 +258,7 @@ window.ScrollReaction = (function() {
 			// Math.min fixes rounding errors: The status can't be >100%
 			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
-			// Call the callback function if possible
+			// Call the callback function, if possible
 			if (typeof config.callback === 'function') {
 				// Pass the scroll position and the status as an argument
 				config.callback(this.position, this.status);
@@ -305,15 +312,15 @@ window.ScrollReaction = (function() {
 	};
 
 	/**
-	* Helper function: a single function for debouncing or throttling
-	* Debounce mode: Executes a given callback function if there was no new call in $interval milliseconds
-	* Throttle mode (default): Executes a given callback function once every $interval milliseconds
-	* @param {function} callback: function to be debounced/throttled
-	* @param {object} context: context for this binding
-	* @param {number} interval: interval between function calls in milliseconds
-	* @param {boolean} debounce: activates the debounce mode [default: false]
-	* @returns {function}
-	*/
+	 * Helper function: a single function for debouncing or throttling
+	 * Debounce mode: Executes a given callback function if there was no new call in $interval milliseconds
+	 * Throttle mode (default): Executes a given callback function once every $interval milliseconds
+	 * @param {function} callback: function to be debounced/throttled
+	 * @param {object} context: context for this binding
+	 * @param {number} interval: interval between function calls in milliseconds
+	 * @param {boolean} debounce: activates the debounce mode [default: false]
+	 * @returns {function}
+	 */
 	function defer(callback, context, interval, debounce) {
 		var lastTime, deferTimer;
 		// Return a function, because this function is used as a callback
