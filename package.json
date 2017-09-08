@@ -1,6 +1,6 @@
 {
 	"name": "scroll-reaction",
-	"version": "1.0.1",
+	"version": "1.1.1",
 	"scripts": {
 		"build": "gulp",
 		"link": "npm link gulp && npm link gulp-minify"
