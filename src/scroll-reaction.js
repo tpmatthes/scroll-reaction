@@ -291,6 +291,8 @@ window.ScrollReaction = (function() {
 			var endPosition = 0;
 			// Find the corresponding element
 			var element = (id) ? document.getElementById(id) : null;
+			// Current URL for history API
+			var currentUrl;
 
 			// Does the element exist?
 			if (element) {
@@ -303,8 +305,11 @@ window.ScrollReaction = (function() {
 
 			// Does the browser support the history API?
 			if (window.history.replaceState) {
-				// Change the hash in the history
-				window.history.replaceState(null, null, '#' + id);
+				// Get the current url, without a hash
+				currentUrl = window.location.href.replace(window.location.hash, '');
+				// Change the state in the history
+				// If the ID is empty, the hash will be removed from the url
+				window.history.replaceState(null, null, (id) ? '#' + id : currentUrl);
 			}
 
 			// Is smooth scrolling enabled?
