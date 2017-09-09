@@ -27,7 +27,7 @@ Include it in your HTML file:
 <script src="scroll-reaction.min.js"></script>
 ```
 
-If you want to use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don't support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior).
+If you want to use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior).
 
 # Getting started
 Let’s say we’re building a simple website with 3 sections:
@@ -201,7 +201,7 @@ If you run into trouble, feel free to post your questions in the [issues section
 
 *Scroll-Reaction.js* supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5) and [classList](http://caniuse.com/#feat=classlist)). It doesn’t rely on ES6 features, so it should support a fair amount of older browsers as well – even Internet Explorer 10+.
 
-If you use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don't support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior). However, *Scroll-Reaction.js* won't fail if the browser lacks support for scroll behavior. It will use a non-smooth “page jump” instead.
+If you use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior). However, *Scroll-Reaction.js* won’t fail if the browser lacks support for scroll behavior. It will use a non-smooth “page jump” instead.
 
 # License
 *Scroll-Reaction.js* is licensed under the [MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).

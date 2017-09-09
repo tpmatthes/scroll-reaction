@@ -10,59 +10,83 @@
 // Global object, can be used as a constructor function (e.g. new ScrollReaction())
 // Wrapped in an IIFE to make use of private variables
 window.ScrollReaction = (function() {
-	// Default config, may be overriden by passing a config object to the constructor function
-	// Example: new ScrollReaction({callback: customCallback, offset: -80})
+	/**
+	 * Default config, may be overriden by passing a config object to the constructor function
+	 * @type {Object}
+	 * 
+	 * @example
+	 * new ScrollReaction({callback: customCallback, offset: -80})
+	 */
 	var config = {
-		/* This attribute is used to find listener elements
-		 * Add it to any element, e.g. <a data-scroll-reaction="section-1" ...>
-		 * The value should match the id of the emitter element, e.g. <section id="section-1" ...>
+		/**
+		 * This attribute is used to find listener elements
+		 * Add it to any element, the value should match the id of the emitter element
+		 * @type {String}
+		 * 
+		 * @example
+		 * <a data-scroll-reaction="section-1" href="#section-1">...</a>
+		 * <section id="section-1">...</section>
 		 */
 		attribute: 'data-scroll-reaction',
 
-		/* These classes will be added to listener elements
+		/**
+		 * These classes will be added to listener elements
 		 * The first class will be added when the user reaches an emitter element
 		 * The second class will be added when the user has scrolled past an emitter element
 		 * If you pass an empty string for one of these class names, no class will be added
+		 * @type {Object}
 		 */
 		classes: {
 			isActive: 'is-active',
 			wasActive: 'was-active',
 		},
 
-		/* This function will be called when the user is scrolling or resizing the window
+		/**
+		 * This function will be called when the user is scrolling or resizing the window
 		 * The vertical scroll position and the status (0-100%) will be passed as arguments
+		 * @type {Function}
 		 */
 		callback: null,
 
-		/* This offset will be subtracted from the vertical position of any emitter element
+		/**
+		 * This offset will be subtracted from the vertical position of any emitter element
 		 * If your listener element should receive its class earlier (scrolling down), pass a higher value
+		 * @type {Number}
 		 */
 		offset: 5,
 
-		/* If you enable this option, the base offset will be calculated from the height of an element
+		/**
+		 * If you enable this option, the base offset will be calculated from the height of an element
 		 * This option accepts any query selector, e.g. '#navigation' or 'nav'
 		 * The first element, which matches the given selector, will be used
 		 * If you use both offset options, the base offset will be added to this
+		 * @type {String}
 		 */
-		offsetFrom: null,
+		offsetFrom: '',
 
-		/* Should smooth scrolling be enabled for all listener elements?
+		/**
+		 * Should smooth scrolling be enabled for all listener elements?
 		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
 		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
 		 * You probably don't want to enable this option, if you use custom event listeners for your links
+		 * @type {Boolean}
 		 */
 		smoothScroll: false,
 
-		/* The update method will get called at a limited rate on scroll (by default 20 times per second)
+		/**
+		 * The update method will get called at a limited rate on scroll (by default 20 times per second)
 		 * However, the max rate can be changed, because it limits the FPS in a custom callback
+		 * @type {Number}
 		 */
 		throttleDelay: 50,
 
-		/* The last emitter element may be "unreachable" on bigger screens
+		/**
+		 * The last emitter element may be "unreachable" on bigger screens
 		 * An emitter is only triggered when the user scrolls past it (- configured offset)
 		 * However, if the user scrolls to the bottom, the last emitter will be activated automatically
 		 * If the listener element should receive its class earlier (scrolling down), pass a higher value
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+		 * @type {Number}
 		 */
 		windowBottomOffset: 20,
 	};
@@ -77,15 +101,9 @@ window.ScrollReaction = (function() {
 
 	// The constructor function returns this object and all of its methods
 	var ScrollReaction = {
-		/**
-		 * Public property: position
-		 * How far has the user scrolled? [in pixels]
-		 */
+		/** @type {Number} How far has the user scrolled (in pixels)? */
 		position: 0,
-		/**
-		 * Public property: status
-		 * How far has the user scrolled? [0-100%]
-		 */
+		/** @type {Number} How far has the user scrolled (0-100%)? */
 		status: 0,
 
 		/**
@@ -284,7 +302,7 @@ window.ScrollReaction = (function() {
 
 		/**
 		 * Scrolls to an element with a given ID or scrolls to top, if no ID is specified
-		 * @param {string} id: ID of the element the browser should scroll to [optional]
+		 * @param {String} id Of the element the browser should scroll to [optional]
 		 */
 		scrollTo: function(id) {
 			// Scroll to top by default
@@ -338,11 +356,11 @@ window.ScrollReaction = (function() {
 	 * Helper function: a single function for debouncing or throttling
 	 * Debounce mode: Executes a given callback function if there was no new call in $interval milliseconds
 	 * Throttle mode (default): Executes a given callback function once every $interval milliseconds
-	 * @param {function} callback: function to be debounced/throttled
-	 * @param {object} context: context for this binding
-	 * @param {number} interval: interval between function calls in milliseconds
-	 * @param {boolean} debounce: activates the debounce mode [default: false]
-	 * @returns {function}
+	 * @param {Function} callback Function to be debounced/throttled
+	 * @param {Object} context For this binding
+	 * @param {Number} interval Between function calls in milliseconds
+	 * @param {Boolean} debounce Mode enabled? [default: false]
+	 * @returns {Function}
 	 */
 	function defer(callback, context, interval, debounce) {
 		var lastTime, deferTimer;
@@ -374,8 +392,8 @@ window.ScrollReaction = (function() {
 
 	/**
 	 * Constructor
-	 * @param {object} userConfig: custom configuration
-	 * @returns {object}
+	 * @param {Object} userConfig Custom configuration
+	 * @return {Object}
 	 */
 	return function(userConfig) {
 		// Overwrite default config properties where necessary

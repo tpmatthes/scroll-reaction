@@ -54,6 +54,6 @@
 		"semi": ["error", "always"],
 		"semi-spacing": "error",
 		"space-before-function-paren": ["error", "never"],
-		"spaced-comment": ["warn", "always"]
+		"spaced-comment": ["warn", "always", { "exceptions": ["!"] }]
 	}
 }
