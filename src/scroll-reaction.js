@@ -226,10 +226,8 @@ window.ScrollReaction = (function() {
 			this.position = window.scrollY;
 
 			// Update the offset, if necessary
-			if (offsetFromElement) {
-				// It will be calculated from an elements height (including borders and padding)
-				offset = offsetFromElement.offsetHeight + config.offset;
-			}
+			// It will be calculated from an elements height (including borders and padding)
+			if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
 
 			// Loop trough all emitters (from last to first)
 			for (var i = emitters.length - 1; i >= 0; i--) {
@@ -319,6 +317,11 @@ window.ScrollReaction = (function() {
 				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
 				// Focus the element for screen readers (accessibility)
 				element.focus();
+
+				// Update the offset, if necessary
+				// It will be calculated from an elements height (including borders and padding)
+				// Needs to be calculated again, because the height of a mobile menu may change (on dropdown)
+				if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
 			}
 
 			// Does the browser support the history API?
