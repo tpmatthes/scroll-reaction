@@ -312,16 +312,16 @@ window.ScrollReaction = (function() {
 
 			// Does the element exist?
 			if (element) {
+				// Update the offset, if necessary
+				// It will be calculated from an elements height (including borders and padding)
+				// Needs to be calculated again, because the height of a mobile menu may change (on dropdown)
+				if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
+				
 				// Get the position of the element, relative to the current position
 				// Subtract the configured offset and add one extra pixel to trigger linked listeners
 				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
 				// Focus the element for screen readers (accessibility)
 				element.focus();
-
-				// Update the offset, if necessary
-				// It will be calculated from an elements height (including borders and padding)
-				// Needs to be calculated again, because the height of a mobile menu may change (on dropdown)
-				if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
 			}
 
 			// Does the browser support the history API?
