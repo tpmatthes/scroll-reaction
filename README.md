@@ -19,7 +19,7 @@ Introducing *Scroll-Reaction.js* – a tiny JavaScript library for ridiculously 
 - easy to use
 
 # Download
-Download it here: [Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.1.1/scroll-reaction.zip)
+Download it here: [Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.1.2/scroll-reaction.zip)
 
 Include it in your HTML file:
 
@@ -103,57 +103,88 @@ You can pass a config object to the constructor function. These are the default 
 
 ``` js
 var scrollEffects = new ScrollReaction({
-  /* This attribute is used to find listener elements
-   * Add it to any element, e.g. <a data-scroll-reaction="section-1" ...>
-   * The value should match the id of the emitter element, e.g. <section id="section-1" ...>
+  /**
+   * This attribute is used to find listener elements
+   * Add it to any element, the value should match the id of the emitter element
+   * @type {String}
+   * 
+   * @example
+   * <a data-scroll-reaction="section-1" href="#section-1">...</a>
+   * <section id="section-1">...</section>
    */
   attribute: 'data-scroll-reaction',
 
-  /* These classes will be added to listener elements
-   * The first class will be added when the user reaches an emitter element
-   * The second class will be added when the user has scrolled past an emitter element
-   * If you pass an empty string for one of these class names, no class will be added
+  /**
+   * This classes will be added to listener elements
+   * It will be added when the user reaches an emitter element
+   * If you pass an empty string, no class will be added
+   * @type {String}
    */
-  classes: {
-    isActive: 'is-active',
-    wasActive: 'was-active',
-  },
+  classCurrent: 'is-active',
 
-  /* This function will be called when the user is scrolling or resizing the window
+  /**
+   * This classes will be added to listener elements
+   * It will be added when the user has scrolled past an emitter element
+   * If you pass an empty string, no class will be added
+   * @type {String}
+   */
+  classPrevious: 'was-active',
+
+  /**
+   * This function will be called when the user clicks on a listener link
+   * If smooth scrolling is enabled, all listener links will automatically get event listeners
+   * The ID of the emitter element will be passed as an argument
+   * @type {Function}
+   */
+  onClick: null,
+
+  /**
+   * This function will be called when the user is scrolling or resizing the window
    * The vertical scroll position and the status (0-100%) will be passed as arguments
+   * @type {Function}
    */
-  callback: null,
+  onUpdate: null,
 
-  /* This offset will be subtracted from the vertical position of any emitter element
+  /**
+   * This offset will be subtracted from the vertical position of any emitter element
    * If your listener element should receive its class earlier (scrolling down), pass a higher value
+   * @type {Number}
    */
   offset: 5,
 
-  /* If you enable this option, the base offset will be calculated from the height of an element
+  /**
+   * If you enable this option, the base offset will be calculated from the height of an element
    * This option accepts any query selector, e.g. '#navigation' or 'nav'
    * The first element, which matches the given selector, will be used
    * If you use both offset options, the base offset will be added to this
+   * @type {String}
    */
-  offsetFrom: null,
+  offsetFrom: '',
 
-  /* Should smooth scrolling be enabled for all listener elements?
+  /**
+   * Should smooth scrolling be enabled for all listener elements?
    * You should add a polyfill (not included) for scroll behavior, if you enable this option
    * If this is enabled and the browser doesn't support it, you will only get a warning in the console
    * You probably don't want to enable this option, if you use custom event listeners for your links
    * Polyfill: https://github.com/iamdustan/smoothscroll
+   * @type {Boolean}
    */
   smoothScroll: false,
 
-  /* The update method will get called at a limited rate on scroll (by default 20 times per second)
+  /**
+   * The update method will get called at a limited rate on scroll (by default 20 times per second)
    * However, the max rate can be changed, because it limits the FPS in a custom callback
+   * @type {Number}
    */
   throttleDelay: 50,
 
-  /* The last emitter element may be "unreachable" on bigger screens
+  /**
+   * The last emitter element may be "unreachable" on bigger screens
    * An emitter is only triggered when the user scrolls past it (- configured offset)
    * However, if the user scrolls to the bottom, the last emitter will be activated automatically
    * If the listener element should receive its class earlier (scrolling down), pass a higher value
    * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+   * @type {Number}
    */
   windowBottomOffset: 20,
 });

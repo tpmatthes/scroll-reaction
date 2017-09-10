@@ -67,7 +67,7 @@ function myCustomCallback(position, status) {
 var scrollEffects = new ScrollReaction({
 	offsetFrom: 'nav',
 	// We will pass our custom callback here
-	callback: myCustomCallback,
+	onUpdate: myCustomCallback,
 	// Enable smooth scrolling
 	smoothScroll: true,
 });
