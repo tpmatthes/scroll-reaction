@@ -15,7 +15,7 @@ window.ScrollReaction = (function() {
 	 * @type {Object}
 	 * 
 	 * @example
-	 * new ScrollReaction({callback: customCallback, offset: -80})
+	 * new ScrollReaction({onUpdate: customCallback, offset: 80})
 	 */
 	var config = {
 		/**
@@ -46,11 +46,19 @@ window.ScrollReaction = (function() {
 		classPrevious: 'was-active',
 
 		/**
+		 * This function will be called when the user clicks on a listener link
+		 * If smooth scrolling is enabled, all listener links will automatically get event listeners
+		 * The ID of the emitter element will be passed as an argument
+		 * @type {Function}
+		 */
+		onClick: null,
+
+		/**
 		 * This function will be called when the user is scrolling or resizing the window
 		 * The vertical scroll position and the status (0-100%) will be passed as arguments
 		 * @type {Function}
 		 */
-		callback: null,
+		onUpdate: null,
 
 		/**
 		 * This offset will be subtracted from the vertical position of any emitter element
@@ -289,10 +297,8 @@ window.ScrollReaction = (function() {
 			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
 			// Call the callback function, if possible
-			if (typeof config.callback === 'function') {
-				// Pass the scroll position and the status as an argument
-				config.callback(this.position, this.status);
-			}
+			// Pass the scroll position and the status as an argument
+			if (typeof config.onUpdate === 'function') config.onUpdate(this.position, this.status);
 		},
 
 		/**
@@ -368,6 +374,9 @@ window.ScrollReaction = (function() {
 		// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
 		ScrollReaction.scrollTo(id);
 
+		// Call the callback function, if possible
+		// Pass the ID of the emitter element as an argument
+		if (typeof config.onClick === 'function') config.onClick(id);
 	}
 
 	/**
