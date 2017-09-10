@@ -294,8 +294,7 @@ window.ScrollReaction = (function() {
 			// Math.min fixes rounding errors: The status can't be >100%
 			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
-			// Call the callback function, if possible
-			// Pass the scroll position and the status as an argument
+			// Call the callback function, if possible, and pass the scroll position and the status as arguments
 			if (typeof config.onUpdate === 'function') config.onUpdate(this.position, this.status);
 		},
 
@@ -368,13 +367,13 @@ window.ScrollReaction = (function() {
 		// Prevent default behaviour (jumping to #link)
 		event.preventDefault();
 
+		// Call the callback function, if possible, and pass the ID of the emitter element as an argument
+		// The function is called before the actual scroll, because it may affect the offsetFrom element
+		if (typeof config.onClick === 'function') config.onClick(id);
+
 		// Scroll to the desired location
 		// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
 		ScrollReaction.scrollTo(id);
-
-		// Call the callback function, if possible
-		// Pass the ID of the emitter element as an argument
-		if (typeof config.onClick === 'function') config.onClick(id);
 	}
 
 	/**
