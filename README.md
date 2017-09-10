@@ -131,21 +131,6 @@ var scrollEffects = new ScrollReaction({
   classPrevious: 'was-active',
 
   /**
-   * This function will be called when the user clicks on a listener link
-   * If smooth scrolling is enabled, all listener links will automatically get event listeners
-   * The ID of the emitter element will be passed as an argument
-   * @type {Function}
-   */
-  onClick: null,
-
-  /**
-   * This function will be called when the user is scrolling or resizing the window
-   * The vertical scroll position and the status (0-100%) will be passed as arguments
-   * @type {Function}
-   */
-  onUpdate: null,
-
-  /**
    * This offset will be subtracted from the vertical position of any emitter element
    * If your listener element should receive its class earlier (scrolling down), pass a higher value
    * @type {Number}
@@ -160,6 +145,21 @@ var scrollEffects = new ScrollReaction({
    * @type {String}
    */
   offsetFrom: '',
+
+  /**
+   * This function will be called when the user clicks on a listener link
+   * If smooth scrolling is enabled, all listener links will automatically get event listeners
+   * The ID of the emitter element will be passed as an argument
+   * @type {Function}
+   */
+  onClick: null,
+
+  /**
+   * This function will be called when the user is scrolling or resizing the window
+   * The vertical scroll position and the status (0-100%) will be passed as arguments
+   * @type {Function}
+   */
+  onUpdate: null,
 
   /**
    * Should smooth scrolling be enabled for all listener elements?
