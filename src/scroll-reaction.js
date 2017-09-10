@@ -135,8 +135,6 @@ window.ScrollReaction = (function() {
 			var foundListeners = document.querySelectorAll('[' + config.attribute + ']');
 			// Lookup array to check if an emitter is already registered
 			var emittersLookup = [];
-			// Required for using the correct scope in the smooth scroll event listeners
-			var self = this, scrollTo = this.scrollTo;
 
 			// Abort if no listener elements have been found
 			if (foundListeners.length == 0) {
@@ -161,13 +159,8 @@ window.ScrollReaction = (function() {
 				if (config.smoothScroll && listenerHref && (listenerHref.indexOf('#') == 0)) {
 					// An existing emitter isn't required, because a "scroll to top" link should be possible
 					// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
-					foundListeners[i].addEventListener('click', function(event) {
-						// Prevent default behaviour (jumping to #link)
-						event.preventDefault();
-						// Scroll to the desired location
-						// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
-						scrollTo.call(self, this.getAttribute(config.attribute));
-					});
+					// If the event listener is already defined on the object, it will not be added again (named function)
+					foundListeners[i].addEventListener('click', scrollSmoothly);
 				}
 
 				// Does the emitter element exist?
@@ -354,6 +347,24 @@ window.ScrollReaction = (function() {
 			}
 		}
 	};
+
+	/**
+	 * Helper function: scroll smoothly, if the user clicks on a listener link
+	 * Needs to be called from an onclick event listener
+	 * @param {Object} event Automatically passed by the event listener
+	 */
+	function scrollSmoothly(event) {
+		// Get the ID of the emitter element
+		var id = this.getAttribute(config.attribute);
+
+		// Prevent default behaviour (jumping to #link)
+		event.preventDefault();
+
+		// Scroll to the desired location
+		// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
+		ScrollReaction.scrollTo(id);
+
+	}
 
 	/**
 	 * Helper function: a single function for debouncing or throttling
