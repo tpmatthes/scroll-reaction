@@ -1,5 +1,5 @@
 /*!
- * ScrollReaction 1.1.1 by Tim-Patrick Matthes
+ * ScrollReaction 1.1.2 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  *
  * Learn more: https://github.com/tpmatthes/scroll-reaction
@@ -30,16 +30,20 @@ window.ScrollReaction = (function() {
 		attribute: 'data-scroll-reaction',
 
 		/**
-		 * These classes will be added to listener elements
-		 * The first class will be added when the user reaches an emitter element
-		 * The second class will be added when the user has scrolled past an emitter element
-		 * If you pass an empty string for one of these class names, no class will be added
-		 * @type {Object}
+		 * This classes will be added to listener elements
+		 * It will be added when the user reaches an emitter element
+		 * If you pass an empty string, no class will be added
+		 * @type {String}
 		 */
-		classes: {
-			isActive: 'is-active',
-			wasActive: 'was-active',
-		},
+		classCurrent: 'is-active',
+
+		/**
+		 * This classes will be added to listener elements
+		 * It will be added when the user has scrolled past an emitter element
+		 * If you pass an empty string, no class will be added
+		 * @type {String}
+		 */
+		classPrevious: 'was-active',
 
 		/**
 		 * This function will be called when the user is scrolling or resizing the window
@@ -255,8 +259,8 @@ window.ScrollReaction = (function() {
 			for (var p in listeners) {
 				var emitter = emitters[listeners[p].emitterIndex];
 				var listener = listeners[p];
-				var isClass = config.classes.isActive;
-				var wasClass = config.classes.wasActive;
+				var isClass = config.classCurrent;
+				var wasClass = config.classPrevious;
 
 				// Is the linked emitter active?
 				if (emitter.isActive) {
@@ -412,17 +416,8 @@ window.ScrollReaction = (function() {
 	return function(userConfig) {
 		// Overwrite default config properties where necessary
 		for (p in userConfig) {
-			// Is the current property named classes?
-			if (p == 'classes') {
-				// The classes option is an object, so its properties need to be copied as well
-				for (np in userConfig.classes) {
-					config.classes[np] = userConfig.classes[np];
-				}
-			// Else: any other property
-			} else {
-				// Copy the property to the config object
-				config[p] = userConfig[p];
-			}
+			// Copy the property to the config object
+			config[p] = userConfig[p];
 		}
 
 		// Return an object with all public methods
