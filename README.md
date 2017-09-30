@@ -80,6 +80,7 @@ You can easily create a “scroll to top” link with smooth scrolling. Just add
 ```
 
 And enable smooth scrolling in your config:
+
 ``` html
 <script src="scroll-reaction.min.js"></script>
 <script>
