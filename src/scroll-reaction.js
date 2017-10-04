@@ -1,5 +1,5 @@
 /*!
- * ScrollReaction 1.1.2 by Tim-Patrick Matthes
+ * ScrollReaction 1.1.3 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  * Learn more: https://github.com/tpmatthes/scroll-reaction
  * MIT License
