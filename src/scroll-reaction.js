@@ -146,59 +146,57 @@ window.ScrollReaction = (function() {
 			// Lookup array to check if an emitter is already registered
 			var emittersLookup = [];
 
-			// Abort if no listener elements have been found
-			if (foundListeners.length == 0) {
-				return false;
-			}
+			// Process listener elements, if at least one exists
+			if (foundListeners.length > 0) {
+				// Empty both arrays, because this method may be called again
+				listeners = [];
+				emitters = [];
 
-			// Empty both arrays, because this method may be called again
-			listeners = [];
-			emitters = [];
+				// Loop trough all listener elements (no for...of loop for <ES6 compatibility)
+				for (var i = 0; i < foundListeners.length; i++) {
+					// Find the corresponding emitter element (by ID)
+					var emitterId = foundListeners[i].getAttribute(config.attribute);
+					var emitter = emitterId ? document.getElementById(emitterId) : null;
+					// Variables for new listener and emitter objects
+					var newListener, newEmitter;
+					// Href attribute of the listener element
+					var listenerHref = foundListeners[i].getAttribute('href');
 
-			// Loop trough all listener elements (no for...of loop for <ES6 compatibility)
-			for (var i = 0; i < foundListeners.length; i++) {
-				// Find the corresponding emitter element (by ID)
-				var emitterId = foundListeners[i].getAttribute(config.attribute);
-				var emitter = emitterId ? document.getElementById(emitterId) : null;
-				// Variables for new listener and emitter objects
-				var newListener, newEmitter;
-				// Href attribute of the listener element
-				var listenerHref = foundListeners[i].getAttribute('href');
-
-				// If smooth scrolling is enabled and the listener has a page anchor: Add an event listener
-				if (config.smoothScroll && listenerHref && (listenerHref.indexOf('#') == 0)) {
-					// An existing emitter isn't required, because a "scroll to top" link should be possible
-					// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
-					// If the event listener is already defined on the object, it will not be added again (named function)
-					foundListeners[i].addEventListener('click', scrollSmoothly);
-				}
-
-				// Does the emitter element exist?
-				// Listeners without linked emitters aren't allowed (they would be useless)
-				if (emitter) {
-					// Create a new emitter object
-					newEmitter = {
-						element: emitter,
-						isActive: false,
-						wasActive: false
-					};
-
-					// Add the emitter object to the corresponding array, only if it doesn't exist yet
-					// It is possible to have multiple listeners linked to the same emitter
-					if (emittersLookup.indexOf(emitterId) == -1) {
-						emitters.push(newEmitter);
-						// Add it to the lookup array, too
-						emittersLookup.push(emitterId);
+					// If smooth scrolling is enabled and the listener has a page anchor: Add an event listener
+					if (config.smoothScroll && listenerHref && (listenerHref.indexOf('#') == 0)) {
+						// An existing emitter isn't required, because a "scroll to top" link should be possible
+						// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
+						// If the event listener is already defined on the object, it will not be added again (named function)
+						foundListeners[i].addEventListener('click', scrollSmoothly);
 					}
 
-					// Create a new listener object (refers to the current emitter)
-					newListener = {
-						element: foundListeners[i],
-						emitterIndex: emittersLookup.indexOf(emitterId)
-					};
+					// Does the emitter element exist?
+					// Listeners without linked emitters aren't allowed (they would be useless)
+					if (emitter) {
+						// Create a new emitter object
+						newEmitter = {
+							element: emitter,
+							isActive: false,
+							wasActive: false
+						};
 
-					// Add the listener object to the corresponding array
-					listeners.push(newListener);
+						// Add the emitter object to the corresponding array, only if it doesn't exist yet
+						// It is possible to have multiple listeners linked to the same emitter
+						if (emittersLookup.indexOf(emitterId) == -1) {
+							emitters.push(newEmitter);
+							// Add it to the lookup array, too
+							emittersLookup.push(emitterId);
+						}
+
+						// Create a new listener object (refers to the current emitter)
+						newListener = {
+							element: foundListeners[i],
+							emitterIndex: emittersLookup.indexOf(emitterId)
+						};
+
+						// Add the listener object to the corresponding array
+						listeners.push(newListener);
+					}
 				}
 			}
 
