@@ -359,8 +359,8 @@ window.ScrollReaction = (function() {
 	 * @param {Object} event Automatically passed by the event listener
 	 */
 	function scrollSmoothly(event) {
-		// Get the ID of the emitter element
-		var id = this.getAttribute(config.attribute);
+		// Get the ID of the element (without the hash symbol)
+		var id = this.getAttribute('href').replace('#', '');
 
 		// Prevent default behaviour (jumping to #link)
 		event.preventDefault();
