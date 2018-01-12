@@ -52,14 +52,6 @@ window.ScrollReaction = (function() {
 		offsetFrom: '',
 
 		/**
-		 * This function will be called when the user clicks on a listener link
-		 * If smooth scrolling is enabled, all listener links will automatically get event listeners
-		 * The ID of the emitter element will be passed as an argument
-		 * @type {Function}
-		 */
-		onClick: null,
-
-		/**
 		 * This function will be called when the user is scrolling or resizing the window
 		 * The vertical scroll position and the status (0-100%) will be passed as arguments
 		 * @type {Function}
@@ -337,10 +329,6 @@ window.ScrollReaction = (function() {
 
 		// Prevent default behaviour (jumping to #link)
 		event.preventDefault();
-
-		// Call the callback function, if possible, and pass the ID of the emitter element as an argument
-		// The function is called before the actual scroll, because it may affect the offsetFrom element
-		if (typeof config.onClick === 'function') config.onClick(id);
 
 		// Scroll to the desired location
 		// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
