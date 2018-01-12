@@ -385,6 +385,9 @@ window.ScrollReaction = (function() {
 			config[p] = userConfig[p];
 		}
 
+		// Initialize Scroll Reaction
+		ScrollReaction.init();
+
 		// Return an object with all public methods
 		return ScrollReaction;
 	};
