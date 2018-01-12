@@ -53,12 +53,13 @@ window.ScrollReaction = (function() {
 
 		/**
 		 * Should smooth scrolling be enabled for all listener elements?
-		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
-		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
-		 * You probably don't want to enable this option, if you use custom event listeners for your links
+		 * You probably want to disable this option, if you use custom event listeners for your links
+		 * If this option is set to 'auto', the script will automatically check for browser support
+		 * If you use a polyfill (not included) for scroll behavior, set this option to true
+		 * Scroll Reaction can not detect JavaScript polyfills
 		 * @type {Boolean}
 		 */
-		smoothScroll: false,
+		smoothScroll: 'auto',
 
 		/**
 		 * The update method will get called at a limited rate on scroll (by default 10 times per second)
@@ -88,6 +89,8 @@ window.ScrollReaction = (function() {
 	var offsetFromElement = null;
 	// Callback for update function
 	var updateCallback = null;
+	// Does the browser support smooth scroll behaviour?
+	var supportsSmoothScrolling = config.smoothScroll == 'auto' && 'scrollBehavior' in document.documentElement.style;
 
 	// The constructor function returns this object and all of its methods
 	var ScrollReaction = {
@@ -302,7 +305,7 @@ window.ScrollReaction = (function() {
 
 			// Does the browser support the history API?
 			if (window.history.replaceState) {
-				// Get the current url, without a hash
+				// Get the current url, without the hash
 				currentUrl = window.location.href.replace(window.location.hash, '');
 				// Change the state in the history
 				// If the ID is empty, the hash will be removed from the url
@@ -310,21 +313,10 @@ window.ScrollReaction = (function() {
 			}
 
 			// Is smooth scrolling enabled?
-			if (config.smoothScroll) {
-				// Does the browser support smooth scroll behaviour?
-				// Is isn't possible to check for browser support by using a simple if statement
-				// The new API extends the old scrollTo function
-				try {
-					// Scroll to the position - smoothly!
-					window.scrollTo({ top: endPosition, left: 0, behavior: 'smooth' });
-				} catch (error) {
-					console.warn(
-						'Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling for scroll-reaction.js'
-					);
-					// Jump to the position
-					window.scrollTo(0, endPosition);
-				}
-				// Else: Smooth Scrolling is disabled
+			// If the config option is set to 'auto', check for browser support
+			if (config.smoothScroll === true || supportsSmoothScrolling) {
+				// Scroll to the position - smoothly!
+				window.scrollTo({ top: endPosition, left: 0, behavior: 'smooth' });
 			} else {
 				// Scroll to the position - not smoothly, but it works
 				window.scrollTo(0, endPosition);
