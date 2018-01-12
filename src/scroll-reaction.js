@@ -28,16 +28,16 @@ window.ScrollReaction = (function() {
 		attribute: 'data-scroll-reaction',
 
 		/**
-		 * This classes will be added to listener elements
+		 * This attribute will be added to listener elements
 		 * It will be added when the user reaches an emitter element
-		 * If you pass an empty string, no class will be added
+		 * If you pass an empty string, no attribute will be added
 		 * @type {String}
 		 */
-		classCurrent: 'is-active',
+		attributeCurrent: 'data-scroll-active',
 
 		/**
 		 * This offset will be subtracted from the vertical position of any emitter element
-		 * If your listener element should receive its class earlier (scrolling down), pass a higher value
+		 * If your listener element should receive its attribute earlier (scrolling down), pass a higher value
 		 * @type {Number}
 		 */
 		offset: 5,
@@ -71,7 +71,7 @@ window.ScrollReaction = (function() {
 		 * The last emitter element may be "unreachable" on bigger screens
 		 * An emitter is only triggered when the user scrolls past it (- configured offset)
 		 * However, if the user scrolls to the bottom, the last emitter will be activated automatically
-		 * If the listener element should receive its class earlier (scrolling down), pass a higher value
+		 * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
 		 * @type {Number}
 		 */
@@ -79,7 +79,7 @@ window.ScrollReaction = (function() {
 	};
 
 	// Arrays with all elements affected by this script
-	// This script will assign a class to all listener elements if the user scrolls past a linked emitter element
+	// This script assigns an attribute to all listener elements, if the user scrolls past a linked emitter element
 	var listeners = [],
 		emitters = [];
 	// Official offset (generated from config)
@@ -265,11 +265,11 @@ window.ScrollReaction = (function() {
 
 				// Is the linked emitter active?
 				if (emitter.active) {
-					// Add the configured class to the listener element
-					listener.element.classList.add(config.classCurrent);
+					// Add the configured attribute to the listener element
+					listener.element.setAttribute(config.attributeCurrent, '');
 				} else {
-					// Remove the class, if the emitter is not currently active
-					listener.element.classList.remove(config.classCurrent);
+					// Remove the attribute, if the emitter is not currently active
+					listener.element.removeAttribute(config.attributeCurrent);
 				}
 			}
 		},

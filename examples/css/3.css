@@ -1,11 +1,6 @@
-/* This class will be added by Scroll-Magic.js */
-a.was-active {
-	opacity: 0.5;
-}
-
 #progress {
-	background-color: #5DDD94;
-	border-top: 2px solid #FFFFFF;
+	background-color: #5ddd94;
+	border-top: 2px solid #ffffff;
 	bottom: 0;
 	height: 10px;
 	left: 0;
