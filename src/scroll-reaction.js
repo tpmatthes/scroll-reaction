@@ -11,7 +11,7 @@ window.ScrollReaction = (function() {
 	/**
 	 * Default config, may be overriden by passing a config object to the constructor function
 	 * @type {Object}
-	 * 
+	 *
 	 * @example
 	 * new ScrollReaction({onUpdate: customCallback, offset: 80})
 	 */
@@ -20,7 +20,7 @@ window.ScrollReaction = (function() {
 		 * This attribute is used to find listener elements
 		 * Add it to any element, the value should match the id of the emitter element
 		 * @type {String}
-		 * 
+		 *
 		 * @example
 		 * <a data-scroll-reaction="section-1" href="#section-1">...</a>
 		 * <section id="section-1">...</section>
@@ -34,14 +34,6 @@ window.ScrollReaction = (function() {
 		 * @type {String}
 		 */
 		classCurrent: 'is-active',
-
-		/**
-		 * This classes will be added to listener elements
-		 * It will be added when the user has scrolled past an emitter element
-		 * If you pass an empty string, no class will be added
-		 * @type {String}
-		 */
-		classPrevious: 'was-active',
 
 		/**
 		 * This offset will be subtracted from the vertical position of any emitter element
@@ -98,12 +90,13 @@ window.ScrollReaction = (function() {
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
 		 * @type {Number}
 		 */
-		windowBottomOffset: 20,
+		windowBottomOffset: 20
 	};
 
 	// Arrays with all elements affected by this script
 	// This script will assign a class to all listener elements if the user scrolls past a linked emitter element
-	var listeners = [], emitters = [];
+	var listeners = [],
+		emitters = [];
 	// Official offset (generated from config)
 	var offset = 0;
 	// The offset will match this elements height, if offsetFrom is enabled
@@ -163,7 +156,7 @@ window.ScrollReaction = (function() {
 					var listenerHref = foundListeners[i].getAttribute('href');
 
 					// If smooth scrolling is enabled and the listener has a page anchor: Add an event listener
-					if (config.smoothScroll && listenerHref && (listenerHref.indexOf('#') == 0)) {
+					if (config.smoothScroll && listenerHref && listenerHref.indexOf('#') == 0) {
 						// An existing emitter isn't required, because a "scroll to top" link should be possible
 						// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
 						// If the event listener is already defined on the object, it will not be added again (named function)
@@ -176,8 +169,7 @@ window.ScrollReaction = (function() {
 						// Create a new emitter object
 						newEmitter = {
 							element: emitter,
-							isActive: false,
-							wasActive: false
+							active: false
 						};
 
 						// Add the emitter object to the corresponding array, only if it doesn't exist yet
@@ -204,7 +196,7 @@ window.ScrollReaction = (function() {
 			if (config.offsetFrom) {
 				// Find the element based on the configured selector
 				offsetFromElement = document.querySelector(config.offsetFrom);
-			// Else: the offset is simply an option
+				// Else: the offset is simply an option
 			} else {
 				offset = config.offset;
 			}
@@ -223,8 +215,19 @@ window.ScrollReaction = (function() {
 			var windowBottomPosition = document.body.clientHeight - window.innerHeight;
 			// Include the offset for the bottom of the page
 			var bottomPosition = windowBottomPosition - config.windowBottomOffset;
+
 			// Get the current scroll position (how far has the user scrolled?)
 			this.position = window.scrollY;
+			// Update the status: How far has the user scrolled?
+			// Math.min fixes rounding errors: The status can't be >100%
+			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
+
+			// Call the callback function, if possible, and pass the scroll position and the status as arguments
+			if (typeof config.onUpdate === 'function') config.onUpdate(this.position, this.status);
+
+			// Abort, if no class should be added for listeners linked to an active emitter
+			// This increases the overall performance
+			if (!config.classCurrent) return;
 
 			// Update the offset, if necessary
 			// It will be calculated from an elements height (including borders and padding)
@@ -238,24 +241,14 @@ window.ScrollReaction = (function() {
 				// Has the user reached the position of the emitter element?
 				// Or has the user scrolled all the way to the bottom of the page?
 				// And is it the first emitter to be activated?
-				if ((this.position > emitterPosition) || (this.position >= bottomPosition)) {
-					// Is this the first active emitter?
-					if (!activatedOnce) {
-						// Mark this emitter as currently active
-						emitters[i].isActive = true;
-						emitters[i].wasActive = false;
-						// Every other emitter in the loop should not be currently active
-						activatedOnce = true;
-					// Else: one of the previous emitters is active
-					} else {
-						// Mark this emitter as active, but not currently active
-						emitters[i].isActive = false;
-						emitters[i].wasActive = true;
-					}
-				// Else: mark this element as not active
+				if ((this.position > emitterPosition || this.position >= bottomPosition) && !activatedOnce) {
+					// Mark this emitter as currently active
+					emitters[i].active = true;
+					// Every other emitter in the loop should not be currently active
+					activatedOnce = true;
 				} else {
-					emitters[i].isActive = false;
-					emitters[i].wasActive = false;
+					// Mark this element as not currently active
+					emitters[i].active = false;
 				}
 			}
 
@@ -263,37 +256,16 @@ window.ScrollReaction = (function() {
 			for (var p in listeners) {
 				var emitter = emitters[listeners[p].emitterIndex];
 				var listener = listeners[p];
-				var isClass = config.classCurrent;
-				var wasClass = config.classPrevious;
 
 				// Is the linked emitter active?
-				if (emitter.isActive) {
-					// Remove the configured wasActive class from the listener element, if necessary
-					// If both classes are actually the same, it will not be removed
-					if (wasClass && wasClass != isClass) listener.element.classList.remove(wasClass);
-					// Add the configured isActive class to the listener element, if necessary
-					if (isClass) listener.element.classList.add(isClass);
-				// Has the emitter been active?
-				} else if (emitter.wasActive) {
-					// Remove the configured isActive class from the listener element, if necessary
-					// If both classes are actually the same, it will not be removed
-					if (isClass && isClass != wasClass) listener.element.classList.remove(isClass);
-					// Add the configured wasActive class to the listener element, if necessary
-					if (wasClass) listener.element.classList.add(wasClass);
-				// Else: the linked emitter is not active
+				if (emitter.active) {
+					// Add the configured class to the listener element
+					listener.element.classList.add(config.classCurrent);
 				} else {
-					// Remove both classes from the listener element, if necessary
-					if (isClass) listener.element.classList.remove(isClass);
-					if (wasClass) listener.element.classList.remove(wasClass);
+					// Remove the class, if the emitter is not currently active
+					listener.element.classList.remove(config.classCurrent);
 				}
 			}
-
-			// Update the status: How far has the user scrolled?
-			// Math.min fixes rounding errors: The status can't be >100%
-			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
-
-			// Call the callback function, if possible, and pass the scroll position and the status as arguments
-			if (typeof config.onUpdate === 'function') config.onUpdate(this.position, this.status);
 		},
 
 		/**
@@ -304,7 +276,7 @@ window.ScrollReaction = (function() {
 			// Scroll to top by default
 			var endPosition = 0;
 			// Find the corresponding element
-			var element = (id) ? document.getElementById(id) : null;
+			var element = id ? document.getElementById(id) : null;
 			// Current URL for history API
 			var currentUrl;
 
@@ -314,7 +286,7 @@ window.ScrollReaction = (function() {
 				// It will be calculated from an elements height (including borders and padding)
 				// Needs to be calculated again, because the height of a mobile menu may change (on dropdown)
 				if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
-				
+
 				// Get the position of the element, relative to the current position
 				// Subtract the configured offset and add one extra pixel to trigger linked listeners
 				endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
@@ -328,7 +300,7 @@ window.ScrollReaction = (function() {
 				currentUrl = window.location.href.replace(window.location.hash, '');
 				// Change the state in the history
 				// If the ID is empty, the hash will be removed from the url
-				window.history.replaceState(null, null, (id) ? '#' + id : currentUrl);
+				window.history.replaceState(null, null, id ? '#' + id : currentUrl);
 			}
 
 			// Is smooth scrolling enabled?
@@ -338,14 +310,15 @@ window.ScrollReaction = (function() {
 				// The new API extends the old scrollTo function
 				try {
 					// Scroll to the position - smoothly!
-					window.scrollTo({top: endPosition, left: 0, behavior: 'smooth'});
-				}
-				catch(error) {
-					console.warn('Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling for scroll-reaction.js');
+					window.scrollTo({ top: endPosition, left: 0, behavior: 'smooth' });
+				} catch (error) {
+					console.warn(
+						'Smooth scroll behavior is not supported by your browser. Please use a polyfill or disable smooth scrolling for scroll-reaction.js'
+					);
 					// Jump to the position
 					window.scrollTo(0, endPosition);
 				}
-			// Else: Smooth Scrolling is disabled
+				// Else: Smooth Scrolling is disabled
 			} else {
 				// Scroll to the position - not smoothly, but it works
 				window.scrollTo(0, endPosition);
@@ -402,7 +375,7 @@ window.ScrollReaction = (function() {
 					// Execute the callback function
 					callback.call(context);
 				}, interval);
-			// Else: simply execute the callback function (only for throttling)
+				// Else: simply execute the callback function (only for throttling)
 			} else {
 				// Save the current time for the next call
 				lastTime = now;
@@ -429,4 +402,4 @@ window.ScrollReaction = (function() {
 	};
 
 	// Thanks for reading the source code! Have a nice day
-}());
+})();
