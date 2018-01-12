@@ -13,7 +13,7 @@ window.ScrollReaction = (function() {
 	 * @type {Object}
 	 *
 	 * @example
-	 * new ScrollReaction({onUpdate: customCallback, offset: 80})
+	 * new ScrollReaction({offset: 80})
 	 */
 	var config = {
 		/**
@@ -52,13 +52,6 @@ window.ScrollReaction = (function() {
 		offsetFrom: '',
 
 		/**
-		 * This function will be called when the user is scrolling or resizing the window
-		 * The vertical scroll position and the status (0-100%) will be passed as arguments
-		 * @type {Function}
-		 */
-		onUpdate: null,
-
-		/**
 		 * Should smooth scrolling be enabled for all listener elements?
 		 * You should add a polyfill (not included) for scroll behavior, if you enable this option
 		 * If this is enabled and the browser doesn't support it, you will only get a warning in the console
@@ -68,11 +61,11 @@ window.ScrollReaction = (function() {
 		smoothScroll: false,
 
 		/**
-		 * The update method will get called at a limited rate on scroll (by default 20 times per second)
+		 * The update method will get called at a limited rate on scroll (by default 10 times per second)
 		 * However, the max rate can be changed, because it limits the FPS in a custom callback
 		 * @type {Number}
 		 */
-		throttleDelay: 50,
+		throttleDelay: 100,
 
 		/**
 		 * The last emitter element may be "unreachable" on bigger screens
@@ -93,6 +86,8 @@ window.ScrollReaction = (function() {
 	var offset = 0;
 	// The offset will match this elements height, if offsetFrom is enabled
 	var offsetFromElement = null;
+	// Callback for update function
+	var updateCallback = null;
 
 	// The constructor function returns this object and all of its methods
 	var ScrollReaction = {
@@ -116,10 +111,30 @@ window.ScrollReaction = (function() {
 			window.addEventListener('orientationchange', defer(this.update, this, 200, true));
 
 			// Update emitters and listeners if the user scrolls
-			// The update method will get called at a limited rate (by default 20 times per second)
+			// The update method will get called at a limited rate (5 times per second)
 			// This prevents unnecessary function calls and improves the overall performance
-			// However, the max rate can be configured, because it limits the FPS in a custom callback
-			window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, false));
+			window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, true));
+		},
+
+		/**
+		 * Sets a throttled callback with access to Scroll Reactions properties
+		 * Advanced scroll effects rely on multiple event listeners
+		 * Pass 'update' as the event name to call the callback on each update
+		 * @param {String} event Name of the event (e.g. 'update')
+		 * @param {Function} callback Function to be called at a throttled rate
+		 */
+		on: function(event, callback) {
+			// Abort, if the callback is not a valid function
+			if (typeof callback !== 'function') return;
+
+			if (event == 'update') {
+				// An update callback should be called on resize, orientationchange and scroll
+				// Only one update callback can be active at any given time
+				updateCallback = callback.bind(this);
+			} else {
+				// Only add the specified event listener
+				window.addEventListener(event, defer(callback, this, config.throttleDelay, true));
+			}
 		},
 
 		/**
@@ -214,12 +229,11 @@ window.ScrollReaction = (function() {
 			// Math.min fixes rounding errors: The status can't be >100%
 			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
-			// Call the callback function, if possible, and pass the scroll position and the status as arguments
-			if (typeof config.onUpdate === 'function') config.onUpdate(this.position, this.status);
+			// Call the callback function, if set
+			if (updateCallback) updateCallback();
 
-			// Abort, if no class should be added for listeners linked to an active emitter
-			// This increases the overall performance
-			if (!config.classCurrent) return;
+			// Abort, if no attribute should be added for listeners linked to an active emitter (performance)
+			if (!config.attributeCurrent) return;
 
 			// Update the offset, if necessary
 			// It will be calculated from an elements height (including borders and padding)
