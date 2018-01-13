@@ -1,5 +1,5 @@
 /*!
- * ScrollReaction 1.1.4 by Tim-Patrick Matthes
+ * ScrollReaction 2.0.0 by Tim-Patrick Matthes
  * Performant, dependency free and fully customizable scroll effects
  * Learn more: https://github.com/tpmatthes/scroll-reaction
  * MIT License
@@ -31,6 +31,7 @@ window.ScrollReaction = (function() {
 		/**
 		 * This attribute will be added to listener elements, when the user reaches an emitter element
 		 * If you pass an empty string or explicity set it to false, no attribute will be added
+		 * It’s entirely up to you to add styling, e.g. a[data-scroll-active] { ... }
 		 * @type {String}
 		 */
 		attributeCurrent: 'data-scroll-active',
@@ -55,8 +56,8 @@ window.ScrollReaction = (function() {
 		 * Should smooth scrolling be enabled for all listener elements?
 		 * You probably want to disable this option, if you use custom event listeners for your links
 		 * If this option is set to 'auto', the script will automatically check for browser support
-		 * If you use a polyfill (not included) for scroll behavior, set this option to true
-		 * Scroll Reaction can't detect JavaScript polyfills
+		 * If you use a polyfill for scroll behavior, set this option to true
+		 * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
 		 * @type {Boolean}
 		 */
 		smoothScroll: 'auto',

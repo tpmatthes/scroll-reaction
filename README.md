@@ -1,38 +1,58 @@
 # Scroll-Reaction.js
-### Performant, dependency free and fully customizable scroll effects
 
-**Now with native smooth scrolling!**
+### Performant and fully customizable scroll effects
 
-Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling, too.
+**Supports native smooth scrolling by default!**
 
-It can be a tedious task: It involves listening to scroll and resize events, updating class names and thinking about edge cases (e.g. unreachable sections). And did I mention the perfomance issues of an un-throttled callback function? 
+Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the
+current section is highlighted. And they need smooth scrolling, too.
+
+It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about
+edge cases (e.g. unreachable sections). And did I mention the perfomance issues of an un-throttled callback function?
 
 You probably don’t want to think about that, and you don’t want to pull in a huge library either.
 
-Introducing *Scroll-Reaction.js* – a tiny JavaScript library for ridiculously easy scroll effects
+Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously easy scroll effects.
 
 **Some benefits:**
-- very small file size (~ 1KB gzipped)
-- dependency free
-- optimized for performance
-- fully customizable
-- easy to use
+
+* ready to use in less than a minute
+* very small file size (~ 1KB gzipped)
+* dependency free
+* optimized for performance
+* fully customizable, if you need it
+* easy to use
+
+# Table of contents
+
+* [Download](#download)
+* [Getting started](#getting-started)
+* [Options](#options)
+* [API and Events](#api-and-events)
+* [Help and browser support](#help-and-browser-support)
+* [License](#license)
 
 # Download
-Download it here: [Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.1.4/scroll-reaction.zip)
 
-Include it in your HTML file:
+Download it here:
+[Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v2.0.0/scroll-reaction.zip)
 
-``` html
+Include the basic version in your HTML file:
+
+```html
 <script src="scroll-reaction.min.js"></script>
 ```
 
-If you want to use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior).
+**Please note:** Most modern browsers still
+[don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth
+scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use
+the file `scroll-reaction-with-polyfill.min.js`.
 
 # Getting started
+
 Let’s say we’re building a simple website with 3 sections:
 
-``` html
+```html
 <section id="section-1">
   ...
 </section>
@@ -44,96 +64,77 @@ Let’s say we’re building a simple website with 3 sections:
 </section>
 ```
 
-We want to add a navigation, where the link to the current section is highlighted. For that purpose we add some markup with *Scroll-Reaction.js*-specific data attributes:
+We want to add a navigation, where the link to the current section is highlighted. For that purpose we add some markup
+with _Scroll-Reaction.js_-specific data attributes:
 
-``` html
+```html
 <nav>
-  <!-- The value of the data attribute should match the id of the element we want to target -->
-  <a href="#section-1" data-scroll-reaction="section-1">Section 1</a>
-  <a href="#section-2" data-scroll-reaction="section-2">Section 2</a>
-  <a href="#section-3" data-scroll-reaction="section-3">Section 3</a>
+  <a href="#section-1" data-scroll-reaction>Section 1</a>
+  <a href="#section-2" data-scroll-reaction>Section 2</a>
+  <a href="#section-3" data-scroll-reaction>Section 3</a>
 </nav>
 ```
 
-We’re almost there! We only have to include *Scroll-Reaction.js* and initialize it:
+We’re almost there! We now have to include _Scroll-Reaction.js_ and initialize it:
 
-``` html
+```html
 <script src="scroll-reaction.min.js"></script>
 <script>
-  var scrollEffects = new ScrollReaction();
-  scrollEffects.init();
+  var reaction = new ScrollReaction();
 </script>
 ```
 
 Done!
 
-Now, if a user scrolls to one of our sections, the corresponding anchor tag receives a new class: `.is-active`. If the user scrolls past one of our sections, the class of the anchor tag changes to: `.was-active`.
+If a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`.
+Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
 
-It’s entirely up to you to add styling to those classes, *Scroll-Reaction.js* only assigns them.
+It’s entirely up to you to add styling, _Scroll-Reaction.js_ only assigns attributes.
 
 #### Bonus tip: “Scroll to top” link
 
-You can easily create a “scroll to top” link with smooth scrolling. Just add an empty data attribute:
+You can easily create a “scroll to top” link with smooth scrolling. Just add a data attribute:
 
-``` html
+```html
 <a href="#" data-scroll-reaction>Beam me up!</a>
 ```
 
-And enable smooth scrolling in your config:
-
-``` html
-<script src="scroll-reaction.min.js"></script>
-<script>
-  var scrollEffects = new ScrollReaction({
-    smoothScroll: true
-  });
-  scrollEffects.init();
-</script>
-```
-
-Smooth scrolling requires an external [polyfill](https://github.com/iamdustan/smoothscroll) for most modern browsers. Please scroll down to learn more about browser support for smooth scrolling.
-
 #### More examples
 
-Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn more about *Scroll-Reaction.js*.
+Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn
+more about _Scroll-Reaction.js_.
 
 # Options
-*Scroll-Reaction.js* is fully customizable.
+
+_Scroll-Reaction.js_ is fully customizable, if you need it.
 
 You can pass a config object to the constructor function. These are the default values:
 
-``` js
-var scrollEffects = new ScrollReaction({
+```js
+var reaction = new ScrollReaction({
   /**
-   * This attribute is used to find listener elements
-   * Add it to any element, the value should match the id of the emitter element
+   * This attribute is used to find listener elements, add it to any element
+   * By default the href page anchor (e.g. href="#test") will be used to identify emitter elements
+   * However, you can set this attribute to a valid id, if no href attribute exists
    * @type {String}
-   * 
+   *
    * @example
-   * <a data-scroll-reaction="section-1" href="#section-1">...</a>
+   * <a href="#section-1" data-scroll-reaction>...</a>
    * <section id="section-1">...</section>
    */
-  attribute: 'data-scroll-reaction',
+  attribute: "data-scroll-reaction",
 
   /**
-   * This classes will be added to listener elements
-   * It will be added when the user reaches an emitter element
-   * If you pass an empty string, no class will be added
+   * This attribute will be added to listener elements, when the user reaches an emitter element
+   * If you pass an empty string or explicity set it to false, no attribute will be added
+   * It’s entirely up to you to add styling, e.g. a[data-scroll-active] { ... }
    * @type {String}
    */
-  classCurrent: 'is-active',
-
-  /**
-   * This classes will be added to listener elements
-   * It will be added when the user has scrolled past an emitter element
-   * If you pass an empty string, no class will be added
-   * @type {String}
-   */
-  classPrevious: 'was-active',
+  attributeCurrent: "data-scroll-active",
 
   /**
    * This offset will be subtracted from the vertical position of any emitter element
-   * If your listener element should receive its class earlier (scrolling down), pass a higher value
+   * If your listener element should receive its attribute earlier (scrolling down), pass a higher value
    * @type {Number}
    */
   offset: 5,
@@ -145,98 +146,93 @@ var scrollEffects = new ScrollReaction({
    * If you use both offset options, the base offset will be added to this
    * @type {String}
    */
-  offsetFrom: '',
-
-  /**
-   * This function will be called when the user clicks on a listener link
-   * If smooth scrolling is enabled, all listener links will automatically get event listeners
-   * The ID of the emitter element will be passed as an argument
-   * @type {Function}
-   */
-  onClick: null,
-
-  /**
-   * This function will be called when the user is scrolling or resizing the window
-   * The vertical scroll position and the status (0-100%) will be passed as arguments
-   * @type {Function}
-   */
-  onUpdate: null,
+  offsetFrom: "",
 
   /**
    * Should smooth scrolling be enabled for all listener elements?
-   * You should add a polyfill (not included) for scroll behavior, if you enable this option
-   * If this is enabled and the browser doesn't support it, you will only get a warning in the console
-   * You probably don't want to enable this option, if you use custom event listeners for your links
-   * Polyfill: https://github.com/iamdustan/smoothscroll
+   * You probably want to disable this option, if you use custom event listeners for your links
+   * If this option is set to 'auto', the script will automatically check for browser support
+   * If you use a polyfill for scroll behavior, set this option to true
+   * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
    * @type {Boolean}
    */
-  smoothScroll: false,
+  smoothScroll: "auto",
 
   /**
-   * The update method will get called at a limited rate on scroll (by default 20 times per second)
-   * However, the max rate can be changed, because it limits the FPS in a custom callback
+   * The update method will get called at a limited rate on scroll (by default 10 times per second)
+   * However, the max rate can be changed, because it limits the FPS in a custom update callback
    * @type {Number}
    */
-  throttleDelay: 50,
+  throttleDelay: 100,
 
   /**
    * The last emitter element may be "unreachable" on bigger screens
    * An emitter is only triggered when the user scrolls past it (- configured offset)
    * However, if the user scrolls to the bottom, the last emitter will be activated automatically
-   * If the listener element should receive its class earlier (scrolling down), pass a higher value
+   * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
    * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
    * @type {Number}
    */
-  windowBottomOffset: 20,
+  windowBottomOffset: 20
 });
-
-// Initialize
-scrollEffects.init();
 ```
 
-# API
-*Scroll-Reaction.js* has a simple API:
+# API and Events
 
-``` js
+_Scroll-Reaction.js_ has a simple API:
+
+```js
 // Include scroll-reaction.min.js first!
 
 // Basic Setup
-var scrollEffects = new ScrollReaction({
-  // Enable smooth scrolling
-  smoothScroll: true
-});
-scrollEffects.init();
+var reaction = new ScrollReaction();
 
 // Access the current scroll position in pixels at any time:
-var pixels = scrollEffects.position; // e.g. 750
+var pixels = reaction.position; // e.g. 750
 
 // Access the current scroll position in percent at any time:
-var percentage = scrollEffects.status + '%'; // e.g. 75%
+var percentage = reaction.status + "%"; // e.g. 75%
+
+// Call this function on scroll, resize and orientation change
+reaction.on("update", function() {
+  // Available variables (see above)
+  // this.position
+  // this.status
+});
 
 // If you reorder or delete elements on the page, you should refresh the cache:
-scrollEffects.refresh();
+reaction.refresh();
 
 // If you add elements or change their height, you should update the position and the status:
-scrollEffects.update(); // Otherwise they will update when the next scroll or resize event occurs
+reaction.update(); // Otherwise they will update when the next scroll or resize event occurs
 
 // Scroll to a specific element:
-scrollEffects.scrollTo('my-id'); // Just pass the ID as an argument
+reaction.scrollTo("my-id"); // Just pass the ID as an argument
 
 // Scroll to top:
-scrollEffects.scrollTo();
+reaction.scrollTo();
 ```
 
 # Help and browser support
-Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn more about *Scroll-Reaction.js*.
 
-If you run into trouble, feel free to post your questions in the [issues section](https://github.com/tpmatthes/scroll-reaction/issues).
+Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn
+more about _Scroll-Reaction.js_.
 
-*Scroll-Reaction.js* supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5) and [classList](http://caniuse.com/#feat=classlist)). It doesn’t rely on ES6 features, so it should support a fair amount of older browsers as well – even Internet Explorer 10+.
+If you run into trouble, feel free to post your questions in the
+[issues section](https://github.com/tpmatthes/scroll-reaction/issues).
 
-If you use smooth scrolling (disabled by default), you should add a [polyfill](https://github.com/iamdustan/smoothscroll). Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior). However, *Scroll-Reaction.js* won’t fail if the browser lacks support for scroll behavior. It will use a non-smooth “page jump” instead.
+_Scroll-Reaction.js_ supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5)). It doesn’t rely on ES6
+features, so it should support a fair amount of older browsers as well – even Internet Explorer 9+.
+
+Most modern browsers still
+[don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth
+scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use
+the file `scroll-reaction-with-polyfill.min.js`.
 
 # License
-*Scroll-Reaction.js* is licensed under the [MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).
+
+_Scroll-Reaction.js_ is licensed under the
+[MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).
 
 Attribution is not required, but always appreciated. Building great things? Show me! :)
 
