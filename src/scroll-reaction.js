@@ -56,14 +56,14 @@ window.ScrollReaction = (function() {
 		 * You probably want to disable this option, if you use custom event listeners for your links
 		 * If this option is set to 'auto', the script will automatically check for browser support
 		 * If you use a polyfill (not included) for scroll behavior, set this option to true
-		 * Scroll Reaction can not detect JavaScript polyfills
+		 * Scroll Reaction can't detect JavaScript polyfills
 		 * @type {Boolean}
 		 */
 		smoothScroll: 'auto',
 
 		/**
 		 * The update method will get called at a limited rate on scroll (by default 10 times per second)
-		 * However, the max rate can be changed, because it limits the FPS in a custom callback
+		 * However, the max rate can be changed, because it limits the FPS in a custom update callback
 		 * @type {Number}
 		 */
 		throttleDelay: 100,
@@ -87,8 +87,13 @@ window.ScrollReaction = (function() {
 	var offset = 0;
 	// The offset will match this elements height, if offsetFrom is enabled
 	var offsetFromElement = null;
-	// Callback for update function
-	var updateCallback = null;
+
+	// Callback functions
+	var callbacks = {
+		update: null,
+		click: null
+	};
+
 	// Does the browser support smooth scroll behaviour?
 	var supportsSmoothScrolling = config.smoothScroll == 'auto' && 'scrollBehavior' in document.documentElement.style;
 
@@ -120,24 +125,19 @@ window.ScrollReaction = (function() {
 		},
 
 		/**
-		 * Sets a throttled callback with access to Scroll Reactions properties
+		 * Sets a callback with access to Scroll Reactions properties (via this)
 		 * Advanced scroll effects rely on multiple event listeners
 		 * Pass 'update' as the event name to call the callback on each update
-		 * @param {String} event Name of the event (e.g. 'update')
-		 * @param {Function} callback Function to be called at a throttled rate
+		 * Pass 'click' to call the callback whenever the user clicks on a smooth scroll link
+		 * @param {String} event Name of the event (e.g. 'update', 'click')
+		 * @param {Function} callback Function to be called
 		 */
 		on: function(event, callback) {
 			// Abort, if the callback is not a valid function
 			if (typeof callback !== 'function') return;
 
-			if (event == 'update') {
-				// An update callback should be called on resize, orientationchange and scroll
-				// Only one update callback can be active at any given time
-				updateCallback = callback.bind(this);
-			} else {
-				// Only add the specified event listener
-				window.addEventListener(event, defer(callback, this, config.throttleDelay, true));
-			}
+			// Assign the callback
+			callbacks[event] = callback.bind(this);
 		},
 
 		/**
@@ -232,14 +232,14 @@ window.ScrollReaction = (function() {
 			// Math.min fixes rounding errors: The status can't be >100%
 			this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
-			// Call the callback function, if set
-			if (updateCallback) updateCallback();
+			// Call the update callback function, if set
+			if (callbacks.update) callbacks.update();
 
 			// Abort, if no attribute should be added for listeners linked to an active emitter (performance)
 			if (!config.attributeCurrent) return;
 
 			// Update the offset, if necessary
-			// It will be calculated from an elements height (including borders and padding)
+			// It can be calculated from an elements height (including borders and padding)
 			if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
 
 			// Loop trough all emitters (from last to first)
@@ -312,8 +312,7 @@ window.ScrollReaction = (function() {
 				window.history.replaceState(null, null, id ? '#' + id : currentUrl);
 			}
 
-			// Is smooth scrolling enabled?
-			// If the config option is set to 'auto', check for browser support
+			// Is smooth scrolling explicity enabled or supported?
 			if (config.smoothScroll === true || supportsSmoothScrolling) {
 				// Scroll to the position - smoothly!
 				window.scrollTo({ top: endPosition, left: 0, behavior: 'smooth' });
@@ -335,6 +334,9 @@ window.ScrollReaction = (function() {
 
 		// Prevent default behaviour (jumping to #link)
 		event.preventDefault();
+
+		// Call the click callback function, if set
+		if (callbacks.click) callbacks.click();
 
 		// Scroll to the desired location
 		// Needs to be called with the correct scope, because scrollTo is a method from ScrollReaction
@@ -380,7 +382,8 @@ window.ScrollReaction = (function() {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor function for Scroll Reaction
+	 * It should be called when the DOM is ready (e.g. onload)
 	 * @param {Object} userConfig Custom configuration
 	 * @return {Object}
 	 */
