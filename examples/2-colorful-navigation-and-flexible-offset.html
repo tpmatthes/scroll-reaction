@@ -11,11 +11,11 @@
 <body>
 
 <nav id="navigation">
-	<a href="#section-1" data-scroll-reaction="section-1">Section 1</a>
-	<a href="#section-2" data-scroll-reaction="section-2">Section 2</a>
-	<a href="#section-3" data-scroll-reaction="section-3">Section 3</a>
-	<a href="#section-4" data-scroll-reaction="section-4">Section 4</a>
-	<a href="#section-5" data-scroll-reaction="section-5">Section 5</a>
+	<a href="#section-1" data-scroll-reaction>Section 1</a>
+	<a href="#section-2" data-scroll-reaction>Section 2</a>
+	<a href="#section-3" data-scroll-reaction>Section 3</a>
+	<a href="#section-4" data-scroll-reaction>Section 4</a>
+	<a href="#section-5" data-scroll-reaction>Section 5</a>
 </nav>
 
 <header>
@@ -53,9 +53,9 @@
 // Be sure to take a look at the CSS files to see how it works
 var scrollEffects = new ScrollReaction({
 	// The navigation is fixed at the top of the window
-	// We will configure the offset to always match the height (in pixels)
+	// We will configure the offset to always match its height (in pixels)
 	offsetFrom: '#navigation',
-	// We could still define additional offset, if necessary
+	// If necessary, we can still define additional offset, e.g.
 	// offset: 100,
 });
 </script>

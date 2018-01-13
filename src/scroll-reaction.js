@@ -17,20 +17,20 @@ window.ScrollReaction = (function() {
 	 */
 	var config = {
 		/**
-		 * This attribute is used to find listener elements
-		 * Add it to any element, the value should match the id of the emitter element
+		 * This attribute is used to find listener elements, add it to any element
+		 * By default the href page anchor (e.g. href="#test") will be used to identify emitter elements
+		 * However, you can set this attribute to a valid id, if no href attribute exists
 		 * @type {String}
 		 *
 		 * @example
-		 * <a data-scroll-reaction="section-1" href="#section-1">...</a>
+		 * <a href="#section-1" data-scroll-reaction>...</a>
 		 * <section id="section-1">...</section>
 		 */
 		attribute: 'data-scroll-reaction',
 
 		/**
-		 * This attribute will be added to listener elements
-		 * It will be added when the user reaches an emitter element
-		 * If you pass an empty string, no attribute will be added
+		 * This attribute will be added to listener elements, when the user reaches an emitter element
+		 * If you pass an empty string or explicity set it to false, no attribute will be added
 		 * @type {String}
 		 */
 		attributeCurrent: 'data-scroll-active',
@@ -101,12 +101,12 @@ window.ScrollReaction = (function() {
 	var ScrollReaction = {
 		/** @type {Number} How far has the user scrolled (in pixels)? */
 		position: 0,
-		/** @type {Number} How far has the user scrolled (0-100%)? */
+		/** @type {Number} How far has the user scrolled (in percent)? */
 		status: 0,
 
 		/**
 		 * Initializes all event listeners and updates emitters and listeners for the first time
-		 * This method should be called when the DOM is ready (e.g. onload)
+		 * This method will be called automatically
 		 */
 		init: function() {
 			// Create fresh arrays for emitters and listeners
@@ -157,16 +157,21 @@ window.ScrollReaction = (function() {
 
 				// Loop trough all listener elements (no for...of loop for <ES6 compatibility)
 				for (var i = 0; i < foundListeners.length; i++) {
+					// Get the href attribute of the listener element
+					var href = foundListeners[i].getAttribute('href');
+					// Does the href attribute contain a page anchor?
+					var listenerHref = href.indexOf('#') == 0 ? href.replace('#', '') : '';
 					// Find the corresponding emitter element (by ID)
-					var emitterId = foundListeners[i].getAttribute(config.attribute);
+					// If the href attribute is a page anchor, it will be used to find the emitter element
+					// Otherwise the configured attribute will be used
+					var emitterId = listenerHref ? listenerHref : foundListeners[i].getAttribute(config.attribute);
 					var emitter = emitterId ? document.getElementById(emitterId) : null;
 					// Variables for new listener and emitter objects
 					var newListener, newEmitter;
-					// Href attribute of the listener element
-					var listenerHref = foundListeners[i].getAttribute('href');
 
-					// If smooth scrolling is enabled and the listener has a page anchor: Add an event listener
-					if (config.smoothScroll && listenerHref && listenerHref.indexOf('#') == 0) {
+					// Add an event listener for smooth scrolling
+					// A valid listener element or a scroll to top link is required
+					if (config.smoothScroll !== false && (listenerHref || href == '#')) {
 						// An existing emitter isn't required, because a "scroll to top" link should be possible
 						// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
 						// If the event listener is already defined on the object, it will not be added again (named function)
