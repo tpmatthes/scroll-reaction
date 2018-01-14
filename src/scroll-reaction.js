@@ -56,7 +56,7 @@ window.ScrollReaction = (function() {
 		 * Should smooth scrolling be enabled for all listener elements?
 		 * You probably want to disable this option, if you use custom event listeners for your links
 		 * If this option is set to 'auto', the script will automatically check for browser support
-		 * If you use a polyfill for scroll behavior, set this option to true
+		 * If you use your own polyfill for scroll behavior, set this option to true
 		 * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
 		 * @type {Boolean}
 		 */

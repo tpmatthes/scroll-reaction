@@ -113,6 +113,16 @@ You can pass a config object to the constructor function. These are the default 
 ```js
 var reaction = new ScrollReaction({
   /**
+   * Explanation of terms
+   *
+   * listener: element with data-scroll-reaction attribute
+   * Example: <a href="#section-1" data-scroll-reaction>...</a>
+   *
+   * emitter: element linked to a listener
+   * Example: <section id="section-1">...</section>
+   */
+
+  /**
    * This attribute is used to find listener elements, add it to any element
    * By default the href page anchor (e.g. href="#test") will be used to identify emitter elements
    * However, you can set this attribute to a valid id, if no href attribute exists
@@ -152,7 +162,7 @@ var reaction = new ScrollReaction({
    * Should smooth scrolling be enabled for all listener elements?
    * You probably want to disable this option, if you use custom event listeners for your links
    * If this option is set to 'auto', the script will automatically check for browser support
-   * If you use a polyfill for scroll behavior, set this option to true
+   * If you use your own polyfill for scroll behavior, set this option to true
    * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
    * @type {Boolean}
    */
