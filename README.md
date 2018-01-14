@@ -1,6 +1,6 @@
 # Scroll-Reaction.js
 
-### Performant and fully customizable scroll effects
+### Performant, dependency free and fully customizable scroll effects
 
 **Supports native smooth scrolling by default!**
 
@@ -260,7 +260,7 @@ the file `scroll-reaction-with-polyfill.min.js`. Thanks to [this awesome project
 # License
 
 _Scroll-Reaction.js_ is licensed under the
-[MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE).
+[MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE.md).
 
 Attribution is not required, but always appreciated. Building great things? Show me! :)
 
