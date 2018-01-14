@@ -255,7 +255,7 @@ features, so it should support a fair amount of older browsers as well – even 
 Most modern browsers still
 [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth
 scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use
-the file `scroll-reaction-with-polyfill.min.js`.
+the file `scroll-reaction-with-polyfill.min.js`. Thanks to [this awesome project](https://github.com/iamdustan/smoothscroll)!
 
 # License
 
