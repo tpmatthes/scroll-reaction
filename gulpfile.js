@@ -11,7 +11,7 @@ var concat = require('gulp-concat');
 var replace = require('gulp-replace');
 
 // Create build/scroll-reaction.min.js
-gulp.task('buildJS', function() {
+gulp.task('build', function() {
 	return gulp
 		.src('src/*.js')
 		.pipe(
@@ -27,7 +27,7 @@ gulp.task('buildJS', function() {
 
 // The command 'gulp' creates build/scroll-reaction.min.js first
 // Afterwards it will create a version including a scroll behavior polyfill
-gulp.task('default', ['buildJS'], function() {
+gulp.task('default', ['build'], function() {
 	return (gulp
 			// Get polyfill and minifed JavaScript code
 			.src(['node_modules/smoothscroll-polyfill/dist/smoothscroll.min.js', 'build/scroll-reaction.min.js'])

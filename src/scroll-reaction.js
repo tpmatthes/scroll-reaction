@@ -72,7 +72,7 @@ window.ScrollReaction = (function() {
 		/**
 		 * The last emitter element may be "unreachable" on bigger screens
 		 * An emitter is only triggered when the user scrolls past it (- configured offset)
-		 * However, if the user scrolls to the bottom, the last emitter will be activated automatically
+		 * If the user scrolls to the bottom, the last emitter will be activated automatically
 		 * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
 		 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
 		 * @type {Number}

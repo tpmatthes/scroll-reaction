@@ -25,12 +25,12 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 # Table of contents
 
-* [Download](#download)
-* [Getting started](#getting-started)
-* [Options](#options)
-* [API and Events](#api-and-events)
-* [Help and browser support](#help-and-browser-support)
-* [License](#license)
+1. [Download](#download)
+2. [Getting started](#getting-started)
+3. [Options](#options)
+4. [API and Events](#api-and-events)
+5. [Help and browser support](#help-and-browser-support)
+6. [License](#license)
 
 # Download
 
@@ -75,7 +75,7 @@ with _Scroll-Reaction.js_-specific data attributes:
 </nav>
 ```
 
-We’re almost there! We now have to include _Scroll-Reaction.js_ and initialize it:
+Afterwards we include _Scroll-Reaction.js_ and initialize it:
 
 ```html
 <script src="scroll-reaction.min.js"></script>
@@ -89,7 +89,13 @@ Done!
 If a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`.
 Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
 
-It’s entirely up to you to add styling, _Scroll-Reaction.js_ only assigns attributes.
+It’s entirely up to you to add styling, _Scroll-Reaction.js_ only assigns attributes. You can use an attribute selector to assign CSS styles to active links:
+
+```css
+a[data-scroll-active] {
+  /* ... */
+}
+```
 
 #### Bonus tip: “Scroll to top” link
 
@@ -115,10 +121,11 @@ var reaction = new ScrollReaction({
   /**
    * Explanation of terms
    *
-   * listener: element with data-scroll-reaction attribute
+   * Listener elements can be registered by adding data-scroll-reaction attributes
    * Example: <a href="#section-1" data-scroll-reaction>...</a>
    *
-   * emitter: element linked to a listener
+   * Emitter elements are linked to one or multiple listener elements
+   * Usually the href attribute of a listener element should match the id of the emitter element
    * Example: <section id="section-1">...</section>
    */
 
@@ -178,7 +185,7 @@ var reaction = new ScrollReaction({
   /**
    * The last emitter element may be "unreachable" on bigger screens
    * An emitter is only triggered when the user scrolls past it (- configured offset)
-   * However, if the user scrolls to the bottom, the last emitter will be activated automatically
+   * If the user scrolls to the bottom, the last emitter will be activated automatically
    * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
    * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
    * @type {Number}
@@ -203,8 +210,19 @@ var pixels = reaction.position; // e.g. 750
 // Access the current scroll position in percent at any time:
 var percentage = reaction.status + "%"; // e.g. 75%
 
-// Call this function on scroll, resize and orientation change
+// Call this function on every update (scroll, resize and orientation change)
+// In most cases, you don't need to register your own event listeners for these events
+// Scroll-Reaction uses custom event listeners with performance optimizations
 reaction.on("update", function() {
+  // Available variables (see above)
+  // this.position
+  // this.status
+});
+
+// Call this function whenever the user clicks on a link with a data-scroll-reaction attribute
+// If smoothScroll is explicity set to false, Scroll-Reaction won't add event listeners to links
+// In that case you should register your own event listeners
+reaction.on("click", function() {
   // Available variables (see above)
   // this.position
   // this.status
