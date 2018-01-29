@@ -123,6 +123,9 @@ window.ScrollReaction = (function() {
 			// The update method will get called at a limited rate (5 times per second)
 			// This prevents unnecessary function calls and improves the overall performance
 			window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, true));
+
+			// Return object after initialization
+			return this;
 		},
 
 		/**
@@ -139,9 +142,6 @@ window.ScrollReaction = (function() {
 
 			// Assign the callback
 			callbacks[event] = callback.bind(this);
-
-			// Call update callback on initialization
-			if (event == 'update') callback();
 		},
 
 		/**
@@ -403,11 +403,8 @@ window.ScrollReaction = (function() {
 			config[p] = userConfig[p];
 		}
 
-		// Initialize Scroll Reaction
-		ScrollReaction.init();
-
-		// Return an object with all public methods
-		return ScrollReaction;
+		// Initalize and return an object with all public methods
+		return ScrollReaction.init();
 	};
 
 	// Thanks for reading the source code! Have a nice day
