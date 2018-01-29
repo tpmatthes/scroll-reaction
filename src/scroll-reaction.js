@@ -142,6 +142,9 @@ window.ScrollReaction = (function() {
 
 			// Assign the callback
 			callbacks[event] = callback.bind(this);
+
+			// Call update callback on initialization
+			if (event == 'update') this.update();
 		},
 
 		/**
