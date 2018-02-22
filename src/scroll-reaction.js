@@ -122,7 +122,7 @@ window.ScrollReaction = (function() {
 			// Update emitters and listeners if the user scrolls
 			// The update method will get called at a limited rate (5 times per second)
 			// This prevents unnecessary function calls and improves the overall performance
-			window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, true));
+			window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, false));
 
 			// Return object after initialization
 			return this;
