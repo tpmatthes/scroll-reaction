@@ -1,6 +1,27 @@
 {
   "name": "scroll-reaction",
-  "version": "1.2.2",
+  "version": "1.2.3",
+  "description": "Performant, dependency free and fully customizable scroll effects - supports native smooth scrolling!",
+  "keywords": [
+    "smooth",
+    "scroll",
+    "scroll effects",
+    "navigation",
+    "onepager"
+  ],
+  "homepage": "https://github.com/tpmatthes/scroll-reaction",
+  "bugs": "https://github.com/tpmatthes/scroll-reaction/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Tim-Patrick Matthes"
+  },
+  "main": "dist/scroll-reaction.js",
+  "files": [
+    "gulpfile.js",
+    "src",
+    "examples",
+    "dist"
+  ],
   "scripts": {
     "build": "gulp"
   },

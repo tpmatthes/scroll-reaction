@@ -4,11 +4,9 @@
 
 **Supports native smooth scrolling by default!**
 
-Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the
-current section is highlighted. And they need smooth scrolling, too.
+Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling, too.
 
-It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about
-edge cases (e.g. unreachable sections). And did I mention the perfomance issues of an un-throttled callback function?
+It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about edge cases (e.g. unreachable sections). And did I mention the perfomance issues of an un-throttled callback function?
 
 You probably don’t want to think about that, and you don’t want to pull in a huge library either.
 
@@ -25,17 +23,18 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 # Table of contents
 
-1. [Download](#download)
+1. [Installation](#installation)
 2. [Getting started](#getting-started)
 3. [Options](#options)
 4. [API and Events](#api-and-events)
 5. [Help and browser support](#help-and-browser-support)
 6. [License](#license)
 
-# Download
+# Installation
 
-Download it here:
-[Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.2.2/scroll-reaction.zip)
+**Option 1:**
+
+Download it here: [Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.2.3/scroll-reaction.zip)
 
 Include the basic version in your HTML file:
 
@@ -43,10 +42,17 @@ Include the basic version in your HTML file:
 <script src="scroll-reaction.min.js"></script>
 ```
 
-**Please note:** Most modern browsers still
-[don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth
-scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use
-the file `scroll-reaction-with-polyfill.min.js`.
+**Option 2:**
+
+Use npm to install _Scroll-Reaction.js_ in your project:
+
+```bash
+npm install scroll-reaction
+```
+
+**Please note:**
+
+Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use the file `scroll-reaction-with-polyfill.min.js`.
 
 # Getting started
 
@@ -64,8 +70,7 @@ Let’s say we’re building a simple website with 3 sections:
 </section>
 ```
 
-We want to add a navigation, where the link to the current section is highlighted. For that purpose we add some markup
-with _Scroll-Reaction.js_-specific data attributes:
+We want to add a navigation, where the link to the current section is highlighted. For that purpose we add some markup with _Scroll-Reaction.js_-specific data attributes:
 
 ```html
 <nav>
@@ -84,10 +89,9 @@ Afterwards we include _Scroll-Reaction.js_ and initialize it:
 </script>
 ```
 
-Done!
+Done! 🎉
 
-If a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`.
-Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
+If a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`. Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
 
 It’s entirely up to you to add styling, _Scroll-Reaction.js_ only assigns attributes. You can use an attribute selector to assign CSS styles to active links:
 
@@ -249,18 +253,13 @@ more about _Scroll-Reaction.js_.
 If you run into trouble, feel free to post your questions in the
 [issues section](https://github.com/tpmatthes/scroll-reaction/issues).
 
-_Scroll-Reaction.js_ supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5)). It doesn’t rely on ES6
-features, so it should support a fair amount of older browsers as well – even Internet Explorer 9+.
+_Scroll-Reaction.js_ supports all modern browsers (requires [ES5](http://caniuse.com/#feat=es5)). It doesn’t rely on ES6 features, so it should support a fair amount of older browsers as well – even Internet Explorer 9+.
 
-Most modern browsers still
-[don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth
-scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use
-the file `scroll-reaction-with-polyfill.min.js`. Thanks to [this awesome project](https://github.com/iamdustan/smoothscroll)!
+Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use the file `scroll-reaction-with-polyfill.min.js`. Thanks to [this awesome project](https://github.com/iamdustan/smoothscroll)!
 
 # License
 
-_Scroll-Reaction.js_ is licensed under the
-[MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE.md).
+_Scroll-Reaction.js_ is licensed under the [MIT license](https://github.com/tpmatthes/scroll-reaction/blob/master/LICENSE.md).
 
 Attribution is not required, but always appreciated. Building great things? Show me! :)
 
