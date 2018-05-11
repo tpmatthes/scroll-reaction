@@ -12,9 +12,6 @@ export default function(userConfig) {
 	// Arrow functions would solve this problem, but they are not supported by ES5
 	var self = this;
 
-	// Merged config, user config overrides default conig
-	var config = {};
-
 	// Lists of all available listener and emitter elements
 	// Searching in the DOM is not very efficient, so the data is stored temporary
 	var listeners = [];
@@ -25,6 +22,12 @@ export default function(userConfig) {
 	var offset = 0;
 	// The offset will match this elements height, if offsetFrom is enabled
 	var offsetFromElement = null;
+
+	// List of all active event handlers
+	var events = [];
+
+	// Merged config, user config overrides default conig
+	var config = {};
 
 	// Overwrite default config properties where necessary
 	for (var c in defaultConfig) {
@@ -145,6 +148,9 @@ export default function(userConfig) {
 		// Math.min fixes rounding errors: The status can't be >100%
 		this.status = Math.min(this.position / windowBottomPosition * 100, 100);
 
+		// Call any update callback, if set
+		this.emit('update');
+
 		// Abort, if no attribute should be added for listener elements
 		// This increases the performance, because unnecessary code is skipped
 		if (!config.attributeCurrent) return;
@@ -252,9 +258,46 @@ export default function(userConfig) {
 		// Prevent default behaviour (jumping to #link)
 		event.preventDefault();
 
+		// Call any click callback, if set
+		this.emit('click');
+
 		// Scroll to the desired location
 		// Needs to be called with the correct scope, because scrollTo is an internal method
 		self.scrollTo(id);
+	};
+
+	/**
+	 * Sets a callback with access to Scroll Reactions properties (via this)
+	 * Advanced scroll effects rely on multiple event listeners
+	 * Pass 'update' as the event name to call the callback on each update
+	 * Pass 'click' to call the callback whenever the user clicks on a smooth scroll link
+	 * @param {String} event Name of the event (e.g. 'update', 'click')
+	 * @param {Function} callback Function to be called
+	 */
+	this.on = function(name, callback) {
+		// Abort, if the callback is not a valid function
+		if (typeof callback !== 'function') return;
+
+		// Assign the callback with the correct this binding
+		events.push({ name: name, callback: callback });
+
+		// Call update callback on initialization
+		if (name == 'update') callback.call(this);
+	};
+
+	/**
+	 * Emits an event and calls linked event listeners
+	 * Used internally, e.g. in the update method
+	 * @param {String} name Of the event
+	 */
+	this.emit = function(name) {
+		// Loop trough all events
+		for (var e = 0; e < events.length; e++) {
+			// Call appropriate callbacks
+			if (events[e].name === name) {
+				events[e].callback.call(this);
+			}
+		}
 	};
 
 	// No need to call this manually - it just works!
