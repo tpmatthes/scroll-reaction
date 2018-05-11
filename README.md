@@ -263,4 +263,4 @@ _Scroll-Reaction.js_ is licensed under the [MIT license](https://github.com/tpma
 
 Attribution is not required, but always appreciated. Building great things? Show me! :)
 
-Copyright 2017 Tim-Patrick Matthes
+Copyright &copy; Tim-Patrick Matthes
