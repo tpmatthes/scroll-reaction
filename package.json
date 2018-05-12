@@ -1,14 +1,8 @@
 {
   "name": "scroll-reaction",
   "version": "1.2.3",
-  "description": "Performant, dependency free and fully customizable scroll effects - supports native smooth scrolling!",
-  "keywords": [
-    "smooth",
-    "scroll",
-    "scroll effects",
-    "navigation",
-    "onepager"
-  ],
+  "description": "Performant, dependency free and fully customizable scroll effects",
+  "keywords": ["smooth", "scroll", "scroll effects", "navigation", "onepager", "onscroll"],
   "homepage": "https://github.com/tpmatthes/scroll-reaction",
   "bugs": "https://github.com/tpmatthes/scroll-reaction/issues",
   "license": "MIT",
@@ -16,10 +10,8 @@
     "name": "Tim-Patrick Matthes"
   },
   "main": "dist/scroll-reaction.js",
-  "files": [
-    "examples",
-    "dist"
-  ],
+  "module ": "dist/scroll-reaction.es.js",
+  "files": ["examples", "dist"],
   "scripts": {
     "build": "rollup -c"
   },
