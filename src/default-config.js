@@ -3,9 +3,11 @@
  */
 export default {
 	/**
-	 * This attribute is used to find listener elements, add it to any element
-	 * By default the href page anchor (e.g. href="#test") will be used to identify emitter elements
-	 * However, you can set this attribute to a valid id, if no href attribute exists
+	 * This attribute is used to find listener elements
+	 * By default the href page anchor (e.g. href="#test")
+	 * will be used to identify emitter elements
+	 * However, you can set this attribute to a valid id,
+	 * if no href attribute exists
 	 * @type {String}
 	 *
 	 * @example
@@ -15,22 +17,28 @@ export default {
 	attribute: 'data-scroll-reaction',
 
 	/**
-	 * This attribute will be added to listener elements, when the user reaches an emitter element
-	 * If you pass an empty string or explicity set it to false, no attribute will be added
-	 * It’s entirely up to you to add styling, e.g. a[data-scroll-active] { ... }
+	 * This attribute will be added to listener elements,
+	 * if the user reaches an emitter element
+	 * If you pass an empty string or explicity set it to false,
+	 * no attribute will be added
+	 * It’s entirely up to you to add styling
+	 * Example: a[data-scroll-active] { ... }
 	 * @type {String}
 	 */
 	attributeCurrent: 'data-scroll-active',
 
 	/**
-	 * This offset will be subtracted from the vertical position of any emitter element
-	 * If your listener element should receive its attribute earlier (scrolling down), pass a higher value
+	 * This offset will be subtracted from the vertical position
+	 * of any emitter element before calculating the current scroll position
+	 * If your listener element should receive its attribute earlier,
+	 * you should pass a (much) higher value
 	 * @type {Number}
 	 */
 	offset: 5,
 
 	/**
-	 * If you enable this option, the base offset will be calculated from the height of an element
+	 * If you enable this option, the base offset
+	 * will be calculated from the height of an element
 	 * This option accepts any query selector, e.g. '#navigation' or 'nav'
 	 * The first element, which matches the given selector, will be used
 	 * If you use both offset options, the base offset will be added to this
@@ -51,27 +59,33 @@ export default {
 
 	/**
 	 * Should smooth scrolling be enabled for all listener elements?
-	 * You probably want to disable this option, if you use custom event listeners for your links
-	 * If this option is set to 'auto', the script will automatically check for browser support
-	 * If you use your own polyfill for scroll behavior, set this option to true
-	 * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
+	 * Browser support is checked automatically, if set to 'auto'
+	 * If you use custom event listeners for your links,
+	 * you probably want to disable this option (= false)
+	 * Set this option to true, if you use your own polyfill
+	 * The script can only check for native support, not for polyfills
 	 * @type {Boolean}
 	 */
 	smoothScroll: 'auto',
 
 	/**
-	 * The update method will get called at a limited rate on scroll (by default 10 times per second)
-	 * However, the max rate can be changed, because it limits the FPS in a custom update callback
+	 * The update method will get called at a limited rate on scroll
+	 * By default it will get called 10 times per second
+	 * This can limit the FPS in a custom update callback
+	 * Feel free to change it to a lower value, if that's the case
 	 * @type {Number}
 	 */
 	throttleDelay: 100,
 
 	/**
 	 * The last emitter element may be "unreachable" on bigger screens
-	 * An emitter is only triggered when the user scrolls past it (- configured offset)
-	 * If the user scrolls to the bottom, the last emitter will be activated automatically
-	 * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
-	 * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+	 * Usually an emitter element is only triggered when the user scrolls past it
+	 * However, if the user scrolls to the bottom of the page,
+	 * the last emitter element will be activated automatically
+	 * If linked listener elements should receive their attributes earlier,
+	 * you should pass a (much) higher value
+	 * Negative values (<0) will make the last emitter element unreachable
+	 * Do you really want that?
 	 * @type {Number}
 	 */
 	windowBottomOffset: 20
