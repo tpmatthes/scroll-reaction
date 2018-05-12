@@ -2,7 +2,9 @@
 
 ### Performant, dependency free and fully customizable scroll effects
 
-**Supports native smooth scrolling by default!**
+Highlight the current section in your navigation, hide your header on scroll or let elements appear with beautiful CSS transitions – it’s easy with _Scroll-Reaction.js_.
+
+# Why do I need it?
 
 Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling, too.
 
@@ -19,22 +21,22 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 * dependency free
 * optimized for performance
 * fully customizable, if you need it
-* easy to use
 
 # Table of contents
 
-1. [Installation](#installation)
-2. [Getting started](#getting-started)
-3. [Options](#options)
-4. [API and Events](#api-and-events)
-5. [Help and browser support](#help-and-browser-support)
-6. [License](#license)
+1.  [Installation](#installation)
+2.  [Getting started](#getting-started)
+3.  [Examples](#examples)
+4.  [Options](#options)
+5.  [API and Events](#api-and-events)
+6.  [Help and browser support](#help-and-browser-support)
+7.  [License](#license)
 
 # Installation
 
-**Option 1:**
+## Option 1: Browser
 
-Download it here: [Scroll-Reaction.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.2.3/scroll-reaction.zip)
+Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.2.3/scroll-reaction.zip)
 
 Include the basic version in your HTML file:
 
@@ -42,17 +44,27 @@ Include the basic version in your HTML file:
 <script src="scroll-reaction.min.js"></script>
 ```
 
-**Option 2:**
+Scroll and party! 🎉
+
+## Option 2: Node.js (build tools)
 
 Use npm to install _Scroll-Reaction.js_ in your project:
 
 ```bash
-npm install scroll-reaction
+$ npm install scroll-reaction
 ```
 
-**Please note:**
+Include it:
 
-Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use the file `scroll-reaction-with-polyfill.min.js`.
+```js
+ScrollReaction = require("scroll-reaction");
+```
+
+Done! 📦
+
+---
+
+**Please note:** Most modern browsers still [don’t support scroll behavior](https://developer.mozilla.org/de/docs/Web/CSS/scroll-behavior) for native smooth scrolling. The default version of _Scroll-Reaction.js_ doesn’t include a polyfill. If you need a polyfill, you can use the file `scroll-reaction-with-polyfill.min.js`.
 
 # Getting started
 
@@ -89,11 +101,11 @@ Afterwards we include _Scroll-Reaction.js_ and initialize it:
 </script>
 ```
 
-Done! 🎉
+Done! 😮
 
-If a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`. Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
+Now, if a user scrolls to one of our sections, the corresponding anchor tag receives a new attribute: `data-scroll-active`. Additionally, if the user clicks on a link, the browser will scroll smoothly to the destination.
 
-It’s entirely up to you to add styling, _Scroll-Reaction.js_ only assigns attributes. You can use an attribute selector to assign CSS styles to active links:
+It’s entirely up to you to add styling. _Scroll-Reaction.js_ only assigns attributes. You can use an attribute selector to assign CSS styles to active links:
 
 ```css
 a[data-scroll-active] {
@@ -101,7 +113,9 @@ a[data-scroll-active] {
 }
 ```
 
-#### Bonus tip: “Scroll to top” link
+# Examples
+
+## “Scroll to top” link
 
 You can easily create a “scroll to top” link with smooth scrolling. Just add a data attribute:
 
@@ -109,10 +123,75 @@ You can easily create a “scroll to top” link with smooth scrolling. Just add
 <a href="#" data-scroll-reaction>Beam me up!</a>
 ```
 
-#### More examples
+_Scroll-Reaction.js_ is smart enough to read the `href` attribute and send the user to the right location. It even updates the URL with the correct hash.
 
-Be sure to have a look at the [examples](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn
-more about _Scroll-Reaction.js_.
+## Animated appearance of elements
+
+_Scroll-Reaction.js_ works well with links, but it can handle any kind of HTML element. You want to animate the appearance of an element? Do it:
+
+```html
+<section id="example" data-scroll-reaction="example">
+  Animate me!
+</section>
+```
+
+If there is no `href` attribute, you have to assign a value to the data attribute. _Scroll-Reaction.js_ finds the element with the given ID (emitter element). It then assigns a class to the element with the data attribute (listener element), if the user reaches the position of the emitter element. In this example `<section>` is both emitter and listener element.
+
+Include _Scroll-Reaction.js_ as always:
+
+```html
+<script src="scroll-reaction.min.js"></script>
+<script>
+  var reaction = new ScrollReaction();
+</script>
+```
+
+And add some nice CSS transitions:
+
+```css
+#example {
+  transition: all 1s ease;
+  transform: rotate(180deg);
+}
+```
+
+It’s easy! 🎊
+
+## Hide your header on scroll
+
+Maybe you have a fixed header like this:
+
+```html
+<header id="example">Hide me!</header>
+```
+
+You can use the _Scroll-Reaction.js_ API to hide it after a certain amount of scrolling:
+
+```html
+<script src="scroll-reaction.min.js"></script>
+<script>
+  // Get the header
+  var header = document.getElementById('example');
+
+  // Initialize Scroll Reaction
+  var reaction = new ScrollReaction();
+
+  reaction.on('update', function() {
+    // Has the user scrolled too far?
+    if (this.position > 999) {
+      // Add a class to hide the header
+      // You can easily animate it with CSS transitions
+      header.classList.add('is-hidden');
+    }
+  });
+</script>
+```
+
+Don’t forget to add some CSS for smooth transitions. ✨
+
+## Even more examples
+
+Be sure to have a look at the [examples folder](https://github.com/tpmatthes/scroll-reaction/tree/master/examples) to learn all about _Scroll-Reaction.js_.
 
 # Options
 
@@ -125,18 +204,28 @@ var reaction = new ScrollReaction({
   /**
    * Explanation of terms
    *
-   * Listener elements can be registered by adding data-scroll-reaction attributes
-   * Example: <a href="#section-1" data-scroll-reaction>...</a>
+   * Listener elements can be registered
+   * by adding custom data attributes, e.g.
+   * <a href="#section-1" data-scroll-reaction>...</a>
    *
-   * Emitter elements are linked to one or multiple listener elements
-   * Usually the href attribute of a listener element should match the id of the emitter element
-   * Example: <section id="section-1">...</section>
+   * Emitter elements are linked to listener elements
+   * Usually the href attribute of a listener element should
+   * match the id of the emitter element, e.g.
+   * <section id="section-1">...</section>
+   *
+   * Scroll-Reaction.js works well with links,
+   * but it can handle any kind of HTML element
+   * If there is no href attribute, you have to assign
+   * a value to the data attribute, e.g.
+   * <h1 data-scroll-reaction="section-1">...</h1>
    */
 
   /**
-   * This attribute is used to find listener elements, add it to any element
-   * By default the href page anchor (e.g. href="#test") will be used to identify emitter elements
-   * However, you can set this attribute to a valid id, if no href attribute exists
+   * This attribute is used to find listener elements
+   * By default the href page anchor (e.g. href="#test")
+   * will be used to identify emitter elements
+   * However, you can set this attribute to a valid id,
+   * if no href attribute exists
    * @type {String}
    *
    * @example
@@ -146,22 +235,28 @@ var reaction = new ScrollReaction({
   attribute: "data-scroll-reaction",
 
   /**
-   * This attribute will be added to listener elements, when the user reaches an emitter element
-   * If you pass an empty string or explicity set it to false, no attribute will be added
-   * It’s entirely up to you to add styling, e.g. a[data-scroll-active] { ... }
+   * This attribute will be added to listener elements,
+   * if the user reaches an emitter element
+   * If you pass an empty string or explicity set it to false,
+   * no attribute will be added
+   * It’s entirely up to you to add styling
+   * Example: a[data-scroll-active] { ... }
    * @type {String}
    */
   attributeCurrent: "data-scroll-active",
 
   /**
-   * This offset will be subtracted from the vertical position of any emitter element
-   * If your listener element should receive its attribute earlier (scrolling down), pass a higher value
+   * This offset will be subtracted from the vertical position
+   * of any emitter element before calculating the current scroll position
+   * If your listener element should receive its attribute earlier,
+   * you should pass a (much) higher value
    * @type {Number}
    */
   offset: 5,
 
   /**
-   * If you enable this option, the base offset will be calculated from the height of an element
+   * If you enable this option, the base offset
+   * will be calculated from the height of an element
    * This option accepts any query selector, e.g. '#navigation' or 'nav'
    * The first element, which matches the given selector, will be used
    * If you use both offset options, the base offset will be added to this
@@ -170,33 +265,52 @@ var reaction = new ScrollReaction({
   offsetFrom: "",
 
   /**
+   * If the user scrolls past an emitter element,
+   * all linked listener elements will get a new attribute
+   * If the user scrolls back up or reaches another emitter element,
+   * existing attributes will be removed immediately
+   * Set this option to false to prevent removing of attributes
+   * This can be used to create one-off animations for appearing elements
+   * @type {Boolean}
+   */
+  rewind: true,
+
+  /**
    * Should smooth scrolling be enabled for all listener elements?
-   * You probably want to disable this option, if you use custom event listeners for your links
-   * If this option is set to 'auto', the script will automatically check for browser support
-   * If you use your own polyfill for scroll behavior, set this option to true
-   * The file scroll-reaction-with-polyfill.min.js includes a polyfill (see releases)
+   * Browser support is checked automatically, if set to 'auto'
+   * If you use custom event listeners for your links,
+   * you probably want to disable this option (= false)
+   * Set this option to true, if you use your own polyfill
+   * The script can only check for native support, not for polyfills
    * @type {Boolean}
    */
   smoothScroll: "auto",
 
   /**
-   * The update method will get called at a limited rate on scroll (by default 10 times per second)
-   * However, the max rate can be changed, because it limits the FPS in a custom update callback
+   * The update method will get called at a limited rate on scroll
+   * By default it will get called 10 times per second
+   * This can limit the FPS in a custom update callback
+   * Feel free to change it to a lower value, if that's the case
    * @type {Number}
    */
   throttleDelay: 100,
 
   /**
    * The last emitter element may be "unreachable" on bigger screens
-   * An emitter is only triggered when the user scrolls past it (- configured offset)
-   * If the user scrolls to the bottom, the last emitter will be activated automatically
-   * If the listener element should receive its attribute earlier (scrolling down), pass a higher value
-   * Any negative value (<0) will make the last emitter unreachable (do you really want that?)
+   * Usually an emitter element is only triggered when the user scrolls past it
+   * However, if the user scrolls to the bottom of the page,
+   * the last emitter element will be activated automatically
+   * If linked listener elements should receive their attributes earlier,
+   * you should pass a (much) higher value
+   * Negative values (<0) will make the last emitter element unreachable
+   * Do you really want that?
    * @type {Number}
    */
   windowBottomOffset: 20
 });
 ```
+
+You can create as many instances as you like, even with (very) different configurations.
 
 # API and Events
 
@@ -214,34 +328,47 @@ var pixels = reaction.position; // e.g. 750
 // Access the current scroll position in percent at any time:
 var percentage = reaction.status + "%"; // e.g. 75%
 
-// Call this function on every update (scroll, resize and orientation change)
-// In most cases, you don't need to register your own event listeners for these events
-// Scroll-Reaction uses custom event listeners with performance optimizations
+/**
+ * Call this function on every update
+ * This includes: scroll, resize and orientation change
+ * In most cases, you don't need to register
+ * your own event listeners for these events
+ * Scroll-Reaction.js uses custom event listeners
+ * with performance optimizations
+ */
 reaction.on("update", function() {
   // Available variables (see above)
   // this.position
   // this.status
 });
 
-// Call this function whenever the user clicks on a link with a data-scroll-reaction attribute
-// If smoothScroll is explicity set to false, Scroll-Reaction won't add event listeners to links
-// In that case you should register your own event listeners
+/**
+ * Call this function whenever the user clicks on a link
+ * with a Scroll-Reaction.js data attribute (see config)
+ * If smoothScroll is explicity set to false,
+ * Scroll-Reaction.js won't add event listeners to links
+ * In that case you should register your own event listeners
+ */
 reaction.on("click", function() {
   // Available variables (see above)
   // this.position
   // this.status
 });
 
-// If you reorder or delete elements on the page, you should refresh the cache:
+// If you reorder or delete elements on the page,
+// you should refresh the cache
 reaction.refresh();
 
-// If you add elements or change their height, you should update the position and the status:
-reaction.update(); // Otherwise they will update when the next scroll or resize event occurs
+// If you add elements or change their height,
+// you should update the position and the status
+// Otherwise they will update when the next scroll event occurs
+reaction.update();
 
-// Scroll to a specific element:
-reaction.scrollTo("my-id"); // Just pass the ID as an argument
+// You want the browser to scroll to a specific element?
+// Just pass the ID as an argument
+reaction.scrollTo("my-id");
 
-// Scroll to top:
+// Scroll to top
 reaction.scrollTo();
 ```
 
