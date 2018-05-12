@@ -39,6 +39,17 @@ export default {
 	offsetFrom: '',
 
 	/**
+	 * If the user scrolls past an emitter element,
+	 * all linked listener elements will get a new attribute
+	 * If the user scrolls back up or reaches another emitter element,
+	 * existing attributes will be removed immediately
+	 * Set this option to false to prevent removing of attributes
+	 * This can be used to create one-off animations for appearing elements
+	 * @type {Boolean}
+	 */
+	rewind: true,
+
+	/**
 	 * Should smooth scrolling be enabled for all listener elements?
 	 * You probably want to disable this option, if you use custom event listeners for your links
 	 * If this option is set to 'auto', the script will automatically check for browser support

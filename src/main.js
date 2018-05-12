@@ -175,8 +175,9 @@ export default function(userConfig) {
 				emitters[e].active = true;
 				// Every other emitter element in the loop should not be currently active
 				activatedOnce = true;
-			} else {
+			} else if (config.rewind) {
 				// Mark this emitter element as not currently active
+				// This shouldn't happen, if rewind config option is set to false
 				emitters[e].active = false;
 			}
 		}
