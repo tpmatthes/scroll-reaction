@@ -1,0 +1,14 @@
+header {
+	height: 50vh; /* 50% of the browser window */
+}
+
+/* Hide sections by default */
+section {
+	opacity: 0;
+}
+
+/* Animate appearance of sections */
+section[data-scroll-active] {
+	opacity: 1;
+	transition: opacity 1s ease;
+}
