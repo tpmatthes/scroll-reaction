@@ -46,14 +46,18 @@
 </section>
 
 <!-- Scroll Reaction -->
-<script src="../dist/scroll-reaction.js" type="text/javascript"></script>
+<script src="../dist/scroll-reaction-with-polyfill.min.js" type="text/javascript"></script>
 <script>
-// We don't need to configure anything to create different styles for the links above
-// All links receive the same data attribute, but each link is styled differently
-// Be sure to take a look at the CSS files to see how it works
+/**
+ * We don't need to configure anything to create
+ * different styles for the links above
+ * All links receive the same data attribute,
+ * but each link is styled differently
+ * Be sure to take a look at the CSS files to see how it works
+ */
 var reaction = new ScrollReaction({
 	// The navigation is fixed at the top of the window
-	// We will configure the offset to always match its height (in pixels)
+	// We will configure the offset to always match its height
 	offsetFrom: '#navigation',
 	// If necessary, we can still define additional offset, e.g.
 	// offset: 100,

@@ -48,12 +48,12 @@
 <div id="progress"></div>
 
 <!-- Scroll Reaction -->
-<script src="../dist/scroll-reaction.js" type="text/javascript"></script>
+<script src="../dist/scroll-reaction-with-polyfill.min.js" type="text/javascript"></script>
 <script>
 // Initialize Scroll Reaction like always
 var reaction = new ScrollReaction({
 	// The navigation is fixed at the top of the window
-	// We will configure the offset to always match its height (in pixels)
+	// We will configure the offset to always match its height
 	offsetFrom: 'nav',
 });
 
@@ -62,10 +62,10 @@ var progress = document.getElementById('progress');
 
 // Call this function on scroll, resize and orientation change
 reaction.on('update', function() {
-	// We will change the width of the progess bar to reflect the status
+	// We will change the width to reflect the status
 	progress.style.width = this.status + '%';
 
-	// We can also use this.position to get the position in pixels
+	// Use this.position to get the position in pixels
 });
 </script>
 

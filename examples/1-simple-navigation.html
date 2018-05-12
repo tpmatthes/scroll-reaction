@@ -39,12 +39,15 @@
 </section>
 
 <!-- Scroll Reaction -->
-<script src="../dist/scroll-reaction.js" type="text/javascript"></script>
+<script src="../dist/scroll-reaction-with-polyfill.min.js" type="text/javascript"></script>
 <script>
-// It is useful to create a public variable, if we want to use the ScrollReaction API later
+/**
+ * It is useful to create a public variable,
+ * if we want to use the ScrollReaction API later
+ */
 var reaction = new ScrollReaction({
 	// The navigation is fixed at the top of the window
-	// We will configure the offset to match the fixed height (in pixels)
+	// We will configure the offset to match the fixed height
 	offset: 80,
 });
 </script>
