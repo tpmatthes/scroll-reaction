@@ -259,7 +259,7 @@ export default function(userConfig) {
 		event.preventDefault();
 
 		// Call any click callback, if set
-		this.emit('click');
+		self.emit('click');
 
 		// Scroll to the desired location
 		// Needs to be called with the correct scope, because scrollTo is an internal method
