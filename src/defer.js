@@ -7,7 +7,7 @@
  * @param {Function} callback Function to be debounced/throttled
  * @param {Object} context For this binding
  * @param {Number} interval Between function calls in milliseconds
- * @param {Boolean} debounce Mode enabled? [default: false]
+ * @param {Boolean} debounce Debounce mode enabled? [default: false]
  * @returns {Function}
  */
 export default function(callback, context, interval, debounce) {

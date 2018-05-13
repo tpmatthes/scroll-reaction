@@ -8,25 +8,48 @@ import defer from './defer.js';
  * @return {Object}
  */
 export default function(userConfig) {
-	// Helper variable for correct this binding
-	// Arrow functions would solve this problem, but they are not supported by ES5
+	/**
+	 * Helper variable for correct this binding (ES5)
+	 * @type {Object}
+	 */
 	var self = this;
 
-	// Lists of all available listener and emitter elements
-	// Searching in the DOM is not very efficient, so the data is stored temporary
+	/**
+	 * Lists of all available listener elements
+	 * @type {Array}
+	 */
 	var listeners = [];
-	// Each emitter element has a unique ID, so a "real" object is used for storing their data
+
+	/**
+	 * List of all available emitter elements
+	 * Each emitter element has a unique ID,
+	 * so a "real" object is used for storing their data
+	 * @type {Object}
+	 */
 	var emitters = {};
 
-	// Official offset, calculated from user config and offsetFrom element
+	/**
+	 * Official offset, calculated from user config and offsetFrom element
+	 * @type {Number}
+	 */
 	var offset = 0;
-	// The offset will match this elements height, if offsetFrom is enabled
+
+	/**
+	 * The offset will match this elements height, if offsetFrom is enabled
+	 * @type {Object}
+	 */
 	var offsetFromElement = null;
 
-	// List of all active event handlers
+	/**
+	 * List of all registered event handlers
+	 * @type {Array}
+	 */
 	var events = [];
 
-	// Merged config, user config overrides default conig
+	/**
+	 * Merged config, user config overrides default conig
+	 * @type {Object}
+	 */
 	var config = {};
 
 	// Overwrite default config properties where necessary
@@ -35,11 +58,24 @@ export default function(userConfig) {
 		config[c] = c in userConfig ? userConfig[c] : defaultConfig[c];
 	}
 
-	// Does the browser support smooth scroll behaviour?
+	/**
+	 * Does the browser support smooth scroll behaviour?
+	 * @type {Boolean}
+	 */
 	var supportsSmoothScrolling = config.smoothScroll == 'auto' && 'scrollBehavior' in document.documentElement.style;
 
-	// Global properties, available inside event listeners
+	/**
+	 * Current scroll position in pixels
+	 * Global property, available inside event listeners
+	 * @type {Number}
+	 */
 	this.position = 0;
+
+	/**
+	 * Current scroll position in percent (0-100)
+	 * Global property, available inside event listeners
+	 * @type {Number}
+	 */
 	this.status = 0;
 
 	/**
@@ -201,7 +237,7 @@ export default function(userConfig) {
 	/**
 	 * Scrolls to an element with a given ID
 	 * Scrolls to top, if no ID is specified
-	 * @param {String} id Of the element the browser should scroll to [optional]
+	 * @param {String} id ID of the element the browser should scroll to [optional]
 	 */
 	this.scrollTo = function(id) {
 		// Find the corresponding element
@@ -272,7 +308,7 @@ export default function(userConfig) {
 	 * Advanced scroll effects rely on multiple event listeners
 	 * Pass 'update' as the event name to call the callback on each update
 	 * Pass 'click' to call the callback whenever the user clicks on a smooth scroll link
-	 * @param {String} event Name of the event (e.g. 'update', 'click')
+	 * @param {String} name Name of the event, e.g. 'update' or 'click'
 	 * @param {Function} callback Function to be called
 	 */
 	this.on = function(name, callback) {
@@ -289,7 +325,7 @@ export default function(userConfig) {
 	/**
 	 * Emits an event and calls linked event listeners
 	 * Used internally, e.g. in the update method
-	 * @param {String} name Of the event
+	 * @param {String} name Name of the event
 	 */
 	this.emit = function(name) {
 		// Loop trough all events
