@@ -9,7 +9,7 @@ import defer from './defer.js';
  */
 export default function(userConfig) {
 	/**
-	 * Helper variable for correct this binding (ES5)
+	 * Helper variable for correct this binding
 	 * @type {Object}
 	 */
 	var self = this;
@@ -210,11 +210,12 @@ export default function(userConfig) {
 		// Loop trough all emitter elements
 		for (var e in emitters) {
 			// Get the Y coordinate of the emitter element (+ configured offset)
-			var emitterPosition = emitters[e].element.getBoundingClientRect().top + this.position - offset;
+			// It can't be a negative value
+			var emitterPosition = Math.max(emitters[e].element.getBoundingClientRect().top + this.position - offset, 0);
 
 			// Has the user reached the position of the emitter element (- offset)?
 			// Or has the user scrolled all the way to the bottom of the page?
-			var hasReachedEmitter = this.position > emitterPosition || this.position >= bottomPosition;
+			var hasReachedEmitter = this.position >= emitterPosition || this.position >= bottomPosition;
 
 			// Can the emitter element be marked as active?
 			if (hasReachedEmitter && emitterPosition >= lastEmitter.position) {
@@ -347,7 +348,7 @@ export default function(userConfig) {
 	 * @param {String} name Name of the event
 	 */
 	this.emit = function(name) {
-		// Loop trough all events
+		// Loop trough all registered events
 		for (var e = 0; e < events.length; e++) {
 			// Call appropriate callbacks
 			if (events[e].name === name) {
