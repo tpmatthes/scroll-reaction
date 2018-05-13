@@ -101,7 +101,8 @@ export default function(userConfig) {
 
 	/**
 	 * Finds all listener and emitter elements in the DOM
-	 * Needs to be called again when the structure of the DOM changes
+	 * Needs to be called again when emitter or listener elements
+	 * are removed or added to the DOM
 	 */
 	this.refresh = function() {
 		// Find all listener elements by attribute of choice
@@ -113,13 +114,14 @@ export default function(userConfig) {
 			listeners = [];
 			emitters = {};
 
-			// Loop trough all listener elements
+			// Loop trough all found listener elements
 			for (var f = foundListeners.length - 1; f >= 0; f--) {
 				// Does the element have a href attribute and does it contain a page anchor?
 				var href = foundListeners[f].getAttribute('href');
 				var listenerHref = href && href.indexOf('#') == 0 ? href.replace('#', '') : '';
 				// Find the corresponding emitter element (by ID)
-				// If the href attribute is a page anchor, it will be used to find the emitter element
+				// If the href attribute is a page anchor,
+				// it will be used to find the emitter element
 				// Otherwise the configured attribute will be used
 				var emitterId = listenerHref ? listenerHref : foundListeners[f].getAttribute(config.attribute);
 				var emitter = emitterId ? document.getElementById(emitterId) : null;
@@ -127,9 +129,12 @@ export default function(userConfig) {
 				// Add an event listener for smooth scrolling
 				// A valid listener element or a scroll to top link is required
 				if (config.smoothScroll !== false && (listenerHref || href == '#')) {
-					// An existing emitter isn't required, because a "scroll to top" link should be possible
-					// In that case, an empty scroll reaction attribute is used (e.g. <a href="#" data-scroll-reaction="">)
-					// If the event listener is already defined on the object, it will not be added again (named function)
+					// An existing emitter isn't required,
+					// because a "scroll to top" link should be possible
+					// In that case, an empty scroll reaction attribute is used
+					// e.g. <a href="#" data-scroll-reaction="">
+					// If the event listener is already defined on the object,
+					// it will not be added again (named function)
 					foundListeners[f].addEventListener('click', scrollSmoothly);
 				}
 
@@ -144,7 +149,8 @@ export default function(userConfig) {
 						active: false
 					};
 					// Add the listener object to the corresponding array
-					// It's possible to have multiple listener elements linked to the same emitter element
+					// It's possible to have multiple listener elements
+					// linked to the same emitter element
 					listeners.push({
 						element: foundListeners[f],
 						emitterId: emitterId
@@ -171,12 +177,17 @@ export default function(userConfig) {
 	 * Updates everything to reflect the current scroll position
 	 */
 	this.update = function() {
-		// Only one emitter should be active at any given time
-		var activatedOnce = false;
 		// Calculate the highest possible scroll position (bottom of the page)
 		var windowBottomPosition = document.body.clientHeight - window.innerHeight;
 		// Include the offset for the bottom of the page
 		var bottomPosition = windowBottomPosition - config.windowBottomOffset;
+		// Reference to the last emitter element
+		// The list of emitter elements may be in random order
+		// We need to find the lowest emitter element
+		var lastEmitter = {
+			id: null,
+			position: -1
+		};
 
 		// Get the current scroll position (how far has the user scrolled?)
 		this.position = window.scrollY;
@@ -206,11 +217,19 @@ export default function(userConfig) {
 			var hasReachedEmitter = this.position > emitterPosition || this.position >= bottomPosition;
 
 			// Can the emitter element be marked as active?
-			if (hasReachedEmitter && !activatedOnce) {
+			if (hasReachedEmitter && emitterPosition >= lastEmitter.position) {
 				// Mark this emitter element as currently active
 				emitters[e].active = true;
-				// Every other emitter element in the loop should not be currently active
-				activatedOnce = true;
+				// Is there an active emitter element?
+				// Since the position of the current emitter element is higher
+				// the last emitter element shouldn't be active anymore
+				// Exception: Both share the exact same position
+				if (lastEmitter.id && emitterPosition != lastEmitter.position) {
+					emitters[lastEmitter.id].active = false;
+				}
+				// Store a reference to the current emitter element
+				lastEmitter.id = e;
+				lastEmitter.position = emitterPosition;
 			} else if (config.rewind) {
 				// Mark this emitter element as not currently active
 				// This shouldn't happen, if rewind config option is set to false

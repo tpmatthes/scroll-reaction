@@ -355,7 +355,7 @@ reaction.on("click", function() {
   // this.status
 });
 
-// If you reorder or delete elements on the page,
+// If you add, reorder or delete emitter or listener elements,
 // you should refresh the cache
 reaction.refresh();
 
