@@ -24,13 +24,13 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 # Table of contents
 
-1.  [Installation](#installation)
-2.  [Getting started](#getting-started)
-3.  [Examples](#examples)
-4.  [Options](#options)
-5.  [API and Events](#api-and-events)
-6.  [Help and browser support](#help-and-browser-support)
-7.  [License](#license)
+1. [Installation](#installation)
+2. [Getting started](#getting-started)
+3. [Examples](#examples)
+4. [Options](#options)
+5. [API and Events](#api-and-events)
+6. [Help and browser support](#help-and-browser-support)
+7. [License](#license)
 
 # Installation
 
@@ -57,7 +57,7 @@ $ npm install scroll-reaction
 Include it:
 
 ```js
-ScrollReaction = require("scroll-reaction");
+const ScrollReaction = require("scroll-reaction");
 ```
 
 Done! 📦
@@ -137,19 +137,22 @@ _Scroll-Reaction.js_ works well with links, but it can handle any kind of HTML e
 
 If there is no `href` attribute, you have to assign a value to the data attribute. _Scroll-Reaction.js_ finds the element with the given ID (emitter element). It then assigns a class to the element with the data attribute (listener element), if the user reaches the position of the emitter element. In this example `<section>` is both emitter and listener element.
 
-Include _Scroll-Reaction.js_ as always:
+Include _Scroll-Reaction.js_:
 
 ```html
 <script src="scroll-reaction.min.js"></script>
 <script>
-  var reaction = new ScrollReaction();
+  var reaction = new ScrollReaction({
+    // Never remove attributes
+    rewind: false
+  });
 </script>
 ```
 
 And add some nice CSS transitions:
 
 ```css
-#example {
+#example[data-scroll-active] {
   transition: all 1s ease;
   transform: rotate(180deg);
 }
@@ -171,17 +174,17 @@ You can use the _Scroll-Reaction.js_ API to hide it after a certain amount of sc
 <script src="scroll-reaction.min.js"></script>
 <script>
   // Get the header
-  var header = document.getElementById('example');
+  var header = document.getElementById("example");
 
   // Initialize Scroll Reaction
   var reaction = new ScrollReaction();
 
-  reaction.on('update', function() {
+  reaction.on("update", function() {
     // Has the user scrolled too far?
     if (this.position > 999) {
       // Add a class to hide the header
       // You can easily animate it with CSS transitions
-      header.classList.add('is-hidden');
+      header.classList.add("is-hidden");
     }
   });
 </script>
