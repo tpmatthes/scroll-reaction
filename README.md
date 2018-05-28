@@ -36,7 +36,7 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 ## Option 1: Browser
 
-Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.3.0/scroll-reaction.zip)
+Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.3.1/scroll-reaction.zip)
 
 Include the basic version in your HTML file:
 
