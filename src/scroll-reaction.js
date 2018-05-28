@@ -55,7 +55,7 @@ export default function(userConfig) {
 	// Overwrite default config properties where necessary
 	for (var c in defaultConfig) {
 		// Copy the property to the "real" config object
-		config[c] = c in userConfig ? userConfig[c] : defaultConfig[c];
+		config[c] = userConfig && c in userConfig ? userConfig[c] : defaultConfig[c];
 	}
 
 	/**
