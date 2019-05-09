@@ -281,7 +281,13 @@ export default function(userConfig) {
 			endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
 
 			// Focus the element for screen readers (accessibility)
+			// This allows the user to navigate to the next element via keyboard
 			element.focus();
+			// If the element isn't focusable, add tabindex="-1" and try again
+			if (document.activeElement !== element) {
+				element.setAttribute('tabindex', '-1');
+				element.focus();
+			}
 		}
 
 		// Does the browser support the history API?
