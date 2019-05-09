@@ -1,7 +1,7 @@
 // Import Rollup plugins
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import uglify from 'rollup-plugin-uglify-es';
+import { terser } from 'rollup-plugin-terser';
 import license from 'rollup-plugin-license';
 
 /**
@@ -56,7 +56,7 @@ export default [
 			name: 'ScrollReaction',
 			format: 'umd'
 		},
-		plugins: [nodeResolve(), commonjs(), uglify(), license(banner())]
+		plugins: [nodeResolve(), commonjs(), terser(), license(banner())]
 	},
 	// Minified UMD bundle with smooth scroll polyfill for browsers
 	{
@@ -66,6 +66,6 @@ export default [
 			name: 'ScrollReaction',
 			format: 'umd'
 		},
-		plugins: [nodeResolve(), commonjs(), uglify(), license(banner(true))]
+		plugins: [nodeResolve(), commonjs(), terser(), license(banner(true))]
 	}
 ];
