@@ -15,7 +15,7 @@ export default function(userConfig) {
 	var self = this;
 
 	/**
-	 * Lists of all available listener elements
+	 * List of all available listener elements
 	 * @type {Array}
 	 */
 	var listeners = [];
@@ -88,7 +88,7 @@ export default function(userConfig) {
 		this.refresh();
 
 		// Update emitter and listener elements if the user changes the window size
-		// Usually the update method won't get called while resizing the window
+		// Usually the update method won't get called while resizing the window, but afterwards
 		// This prevents unnecessary function calls and improves the overall performance
 		window.addEventListener('resize', defer(this.update, this, 200, true));
 		window.addEventListener('orientationchange', defer(this.update, this, 200, true));
@@ -193,7 +193,7 @@ export default function(userConfig) {
 		this.position = window.scrollY;
 		// Update the status: How far has the user scrolled?
 		// Math.min fixes rounding errors: The status can't be >100%
-		this.status = Math.min(this.position / windowBottomPosition * 100, 100);
+		this.status = Math.min((this.position / windowBottomPosition) * 100, 100);
 
 		// Call any update callback, if set
 		this.emit('update');
@@ -248,7 +248,7 @@ export default function(userConfig) {
 				// Add the configured attribute to the listener element
 				listener.element.setAttribute(config.attributeCurrent, '');
 			} else {
-				// Remove the attribute, if the emitter is not currently active
+				// Remove the attribute, because the emitter is not currently active
 				listener.element.removeAttribute(config.attributeCurrent);
 			}
 		}
