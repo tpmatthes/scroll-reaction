@@ -24,7 +24,9 @@
   "module ": "dist/scroll-reaction.es.js",
   "files": [
     "examples",
-    "dist"
+    "dist",
+    "!.DS_Store",
+    "!.zip"
   ],
   "scripts": {
     "build": "rollup -c"
