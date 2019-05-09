@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Example #5: keyboard accessible inputs | scroll-reaction.js</title>
+
+		<link href="css/1.css" rel="stylesheet" />
+		<link href="css/5.css" rel="stylesheet" />
+	</head>
+	<body>
+		<nav>
+			<!-- Scroll to top link -->
+			<a href="#" data-scroll-reaction>Top</a>
+			<!-- The value of the data attribute should match the id of the element we want to target -->
+			<a href="#section-1" data-scroll-reaction>Section 1</a>
+			<a href="#section-2" data-scroll-reaction>Section 2</a>
+			<a href="#section-3" data-scroll-reaction>Section 3</a>
+		</nav>
+
+		<header>
+			<div>
+				<h1>Example #5: keyboard accessible inputs</h1>
+				Click on a link and tab into the next input field
+			</div>
+		</header>
+
+		<section id="section-1">
+			<h2>#1</h2>
+			<input type="text" />
+		</section>
+
+		<section id="section-2">
+			<h2>#2</h2>
+			<input type="text" />
+		</section>
+
+		<section id="section-3">
+			<h2>#3</h2>
+			<input type="text" />
+		</section>
+
+		<!-- Scroll Reaction -->
+		<script src="../dist/scroll-reaction-with-polyfill.min.js" type="text/javascript"></script>
+		<script>
+			/**
+			 * It is useful to create a public variable,
+			 * if we want to use the ScrollReaction API later
+			 */
+			var reaction = new ScrollReaction({
+				// The navigation is fixed at the top of the window
+				// We will configure the offset to match the fixed height
+				offset: 80
+			});
+		</script>
+	</body>
+</html>
