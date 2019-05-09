@@ -8,7 +8,7 @@ Highlight the current section in your navigation, hide your header on scroll or 
 
 Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling, too.
 
-It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about edge cases (e.g. unreachable sections). And did I mention the perfomance issues of an un-throttled callback function?
+It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about many stress cases (e.g. unreachable sections, keyboard accessibility, reduced motion media query). And did I mention the perfomance issues of an un-throttled callback function?
 
 You probably don’t want to think about that, and you don’t want to pull in a huge library either.
 
@@ -16,11 +16,11 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 **Some benefits:**
 
-* ready to use in less than a minute
-* very small file size (~ 1KB gzipped)
-* dependency free
-* optimized for performance
-* fully customizable, if you need it
+- ready to use in less than a minute
+- very small file size (~ 1KB gzipped)
+- dependency free
+- optimized for performance
+- fully customizable, if you need it
 
 # Table of contents
 
@@ -36,7 +36,7 @@ Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously 
 
 ## Option 1: Browser
 
-Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.3.1/scroll-reaction.zip)
+Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.3.2/scroll-reaction.zip)
 
 Include the basic version in your HTML file:
 
@@ -44,7 +44,7 @@ Include the basic version in your HTML file:
 <script src="scroll-reaction.min.js"></script>
 ```
 
-Scroll and party! 🎉
+Read [Getting started](#getting-started), scroll and party! 🎉
 
 ## Option 2: Node.js (build tools)
 
