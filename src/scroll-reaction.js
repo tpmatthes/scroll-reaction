@@ -293,8 +293,12 @@ export default function(userConfig) {
 			window.history.replaceState(null, null, id ? '#' + id : currentUrl);
 		}
 
-		// Is smooth scrolling supported or forced (config)?
-		if (supportsSmoothScrolling || config.smoothScroll === true) {
+		// The reduced motion media query provides a method to disable motion at the browser level
+		// If the user has turned this option on, scrolling should not be smooth
+		var userAllowsMotion = !window.matchMedia('(prefers-reduced-motion)').matches;
+
+		// Is smooth scrolling supported or forced (config) and does the user allow motion?
+		if ((supportsSmoothScrolling || config.smoothScroll === true) && userAllowsMotion) {
 			// Scroll to the position - smoothly!
 			window.scrollTo({ top: endPosition, left: 0, behavior: 'smooth' });
 		} else {
