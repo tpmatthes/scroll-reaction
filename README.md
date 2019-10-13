@@ -92,7 +92,7 @@ We want to add a navigation, where the link to the current section is highlighte
 </nav>
 ```
 
-Afterwards we include _Scroll-Reaction.js_ and initialize it:
+Afterwards we include _Scroll-Reaction.js_ in the HTML file before `</body>` and initialize it:
 
 ```html
 <script src="scroll-reaction.min.js"></script>
@@ -135,7 +135,7 @@ _Scroll-Reaction.js_ works well with links, but it can handle any kind of HTML e
 </section>
 ```
 
-If there is no `href` attribute, you have to assign a value to the data attribute. _Scroll-Reaction.js_ finds the element with the given ID (emitter element). It then assigns a class to the element with the data attribute (listener element), if the user reaches the position of the emitter element. In this example `<section>` is both emitter and listener element.
+If there is no `href` attribute, you have to assign a value to the data attribute. _Scroll-Reaction.js_ finds the element with the given ID (emitter element). It then assigns the new attribute `data-scroll-active` to the element with the `data-scroll-reaction` attribute (listener element), if the user reaches the position of the emitter element. In this example `<section>` is both emitter and listener element.
 
 Include _Scroll-Reaction.js_:
 
