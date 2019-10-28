@@ -29,7 +29,7 @@ export default function(userConfig) {
 	var emitters = {};
 
 	/**
-	 * Official offset, calculated from user config and offsetFrom element
+	 * Total offset, calculated from user config and offsetFrom element
 	 * @type {Number}
 	 */
 	var offset = 0;
@@ -203,8 +203,7 @@ export default function(userConfig) {
 		if (!config.attributeCurrent) return;
 
 		// Update the offset, if necessary
-		// It may be calculated from an elements height
-		// This includes all borders and padding
+		// It may be calculated from an elements height. This includes all borders and padding
 		if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
 
 		// Loop trough all emitter elements
