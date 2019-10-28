@@ -281,11 +281,11 @@ export default function(userConfig) {
 
 			// Focus the element for screen readers (accessibility)
 			// This allows the user to navigate to the next element via keyboard
-			element.focus();
+			element.focus({ preventScroll: true });
 			// If the element isn't focusable, add tabindex="-1" and try again
 			if (document.activeElement !== element) {
 				element.setAttribute('tabindex', '-1');
-				element.focus();
+				element.focus({ preventScroll: true });
 			}
 		}
 
