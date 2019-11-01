@@ -41,11 +41,10 @@
 		<script>
 			// Initialize Scroll Reaction like always
 			var reaction = new ScrollReaction({
-				// We will configure the offset to always match the header height
-				// It's half the height of the browser window
-				offsetFrom: 'header',
 				// Only assign data attributes once (one-off assignment)
-				rewind: false
+				rewind: false,
+				// Animate every visible element, all at once
+				multiple: true
 			});
 		</script>
 	</body>

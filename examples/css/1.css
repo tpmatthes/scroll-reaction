@@ -67,3 +67,8 @@ section {
 	height: 1000px;
 	justify-content: center;
 }
+
+.space {
+	background-color: #ffffff;
+	color: #3f364b;
+}

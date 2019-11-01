@@ -32,6 +32,10 @@
 			<h2>#2</h2>
 		</section>
 
+		<section class="space">
+			<h2>Nothing</h2>
+		</section>
+
 		<section id="section-3">
 			<h2>#3</h2>
 		</section>
@@ -56,10 +60,10 @@
 			 */
 			var reaction = new ScrollReaction({
 				// The navigation is fixed at the top of the window
-				// We will configure the offset to always match its height
-				offsetFrom: '#navigation'
-				// If necessary, we can still define additional offset, e.g.
-				// offset: 100,
+				// We will configure the top offset to always match its height
+				offsetTop: function() {
+					return document.getElementById('navigation').offsetHeight;
+				}
 			});
 		</script>
 	</body>
