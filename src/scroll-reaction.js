@@ -29,18 +29,6 @@ export default function(userConfig) {
 	var emitters = {};
 
 	/**
-	 * Total offset, calculated from user config and offsetFrom element
-	 * @type {Number}
-	 */
-	var offset = 0;
-
-	/**
-	 * The offset will match this elements height, if offsetFrom is enabled
-	 * @type {Object}
-	 */
-	var offsetFromElement = null;
-
-	/**
 	 * List of all registered event handlers
 	 * @type {Array}
 	 */
@@ -56,6 +44,19 @@ export default function(userConfig) {
 	for (var c in defaultConfig) {
 		// Copy the property to the "real" config object
 		config[c] = userConfig && c in userConfig ? userConfig[c] : defaultConfig[c];
+	}
+
+	// Deprecated: support old offset config option
+	if (userConfig.offset) {
+		config.offsetTop = userConfig.offset;
+	}
+
+	// Deprecated: support old offsetFrom config option
+	if (userConfig.offsetFrom) {
+		config.offsetTop = function() {
+			var offset = userConfig.offset ? userConfig.offset : 0;
+			return document.querySelector(userConfig.offsetFrom).offsetHeight + offset;
+		};
 	}
 
 	/**
@@ -159,15 +160,6 @@ export default function(userConfig) {
 			}
 		}
 
-		// Should the offset be calculated from an elements height?
-		if (config.offsetFrom) {
-			// Try to find the element based on the configured selector
-			offsetFromElement = document.querySelector(config.offsetFrom);
-		} else {
-			// If no selector is specified, the offset is simply an option
-			offset = config.offset;
-		}
-
 		// Update all elements, just in case the user has already scrolled
 		// This can happen when the URL contans a page anchor (e.g. #link)
 		this.update();
@@ -202,39 +194,57 @@ export default function(userConfig) {
 		// This increases the performance, because unnecessary code is skipped
 		if (!config.attributeCurrent) return;
 
-		// Update the offset, if necessary
-		// It may be calculated from an elements height. This includes all borders and padding
-		if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
+		// Update the top offset, it can be the return value of a given function
+		var offsetTop = typeof config.offsetTop === 'function' ? config.offsetTop.call(this) : config.offsetTop;
+		// Update the bottom offset, it can be the return value of a given function
+		var offsetBottom = typeof config.offsetBottom === 'function' ? config.offsetBottom.call(this) : config.offsetBottom;
+
+		/**
+		 * If multiple emitter elements can be active at the same time,
+		 * every element inside the viewport (- offsets) should be active.
+		 * Otherwise only the lowest element, that has been reached by the user
+		 * and is therefore above the viewport (- top offset), should be active.
+		 */
+		var margin = {
+			top: config.multiple ? window.innerHeight - offsetBottom : offsetTop,
+			bottom: offsetTop
+		};
 
 		// Loop trough all emitter elements
 		for (var e in emitters) {
-			// Get the Y coordinate of the emitter element (+ configured offset)
-			// It can't be a negative value
-			var emitterPosition = Math.max(emitters[e].element.getBoundingClientRect().top + this.position - offset, 0);
+			// Get the Y coordinates of the emitter element on the page
+			// Respect the viewport offsets
+			var emitterPosition = {
+				top: Math.max(emitters[e].element.getBoundingClientRect().top + this.position - margin.top, 0),
+				bottom: Math.max(emitters[e].element.getBoundingClientRect().bottom + this.position - margin.bottom, 0)
+			};
 
-			// Has the user reached the position of the emitter element (- offset)?
+			// Has the user reached the calculated position of the emitter element?
 			// Or has the user scrolled all the way to the bottom of the page?
-			var hasReachedEmitter = this.position >= emitterPosition || this.position >= bottomPosition;
+			var hasReachedEmitter = this.position >= emitterPosition.top || this.position >= bottomPosition;
+			var hasSurpassedEmitter = this.position > emitterPosition.bottom;
 
-			// Can the emitter element be marked as active?
-			if (hasReachedEmitter && emitterPosition >= lastEmitter.position) {
+			// If this emitter element is visible and the multiple config option is set to true,
+			// it will be marked as active, even if it is not the only element, that has been reached by the user
+			if (hasReachedEmitter && !hasSurpassedEmitter && config.multiple) {
 				// Mark this emitter element as currently active
 				emitters[e].active = true;
-				// Is there an active emitter element?
-				// Since the position of the current emitter element is higher
-				// the last emitter element shouldn't be active anymore
-				// Exception: Both share the exact same position
-				if (lastEmitter.id && emitterPosition != lastEmitter.position) {
-					emitters[lastEmitter.id].active = false;
-				}
-				// Store a reference to the current emitter element
-				lastEmitter.id = e;
-				lastEmitter.position = emitterPosition;
 			} else if (config.rewind) {
-				// Mark this emitter element as not currently active
+				// Mark this emitter element as not active (anymore)
 				// This shouldn't happen, if rewind config option is set to false
 				emitters[e].active = false;
 			}
+
+			// Store a reference to the lowest emitter element, that has been reached by the user
+			if (hasReachedEmitter && emitterPosition.top > lastEmitter.position) {
+				lastEmitter.id = e;
+				lastEmitter.position = emitterPosition.top;
+			}
+		}
+
+		// The lowest emitter element, that has been reached by the user, should always be active
+		if (lastEmitter.id) {
+			emitters[lastEmitter.id].active = true;
 		}
 
 		// Loop trough all listener elements
@@ -268,16 +278,12 @@ export default function(userConfig) {
 
 		// Does the element exist?
 		if (element) {
-			// Update the offset, if necessary
-			// It may be be calculated from an elements height
-			// This includes all borders and padding
-			// It neeeds to be calculated again, because the height may change
-			if (offsetFromElement) offset = offsetFromElement.offsetHeight + config.offset;
+			// Update the top offset, it can be the return value of a given function
+			var offsetTop = typeof config.offsetTop === 'function' ? config.offsetTop.call(this) : config.offsetTop;
 
 			// Get the position of the element, relative to the current position
-			// Subtract the configured offset
-			// Add one extra pixel to trigger linked listener elements
-			endPosition = element.getBoundingClientRect().top + this.position - offset + 1;
+			// Subtract the calculated offsetTop and add one extra pixel to trigger linked listener elements
+			endPosition = element.getBoundingClientRect().top + this.position - offsetTop + 1;
 
 			// Focus the element for screen readers (accessibility)
 			// This allows the user to navigate to the next element via keyboard

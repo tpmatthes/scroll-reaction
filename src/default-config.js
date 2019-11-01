@@ -28,23 +28,33 @@ export default {
 	attributeCurrent: 'data-scroll-active',
 
 	/**
-	 * This offset will be subtracted from the vertical position
-	 * of any emitter element before calculating the current scroll position
-	 * If your listener element should receive its attribute earlier,
-	 * you should pass a (much) higher value
-	 * @type {Number}
+	 * By default only one emitter element can be active at any given time.
+	 * This is always the latest element, which has been reached by the user.
+	 * If this option is set to true, every visible emitter element will become active.
+	 * @type {Boolean}
 	 */
-	offset: 5,
+	multiple: false,
 
 	/**
-	 * If you enable this option, the base offset
-	 * will be calculated from the height of an element
-	 * This option accepts any query selector, e.g. '#navigation' or 'nav'
-	 * The first element, which matches the given selector, will be used
-	 * If you use both offset options, the base offset will be added to this
-	 * @type {String}
+	 * Top offset for detecting emitter elements inside the viewport.
+	 * If your listener element should receive its attribute earlier,
+	 * you should pass a (much) higher value.
+	 * If you want the offset to always match the height of an element,
+	 * you can pass a function, that calculates the offset and returns a number.
+	 * @type {Number|function}
 	 */
-	offsetFrom: '',
+	offsetTop: 5,
+
+	/**
+	 * Bottom offset for detecting emitter elements inside the viewport.
+	 * If your listener element should receive its attribute earlier,
+	 * you should pass a (much) higher value.
+	 * If you want the offset to always match the height of an element,
+	 * you can pass a function, that calculates the offset and returns a number.
+	 * This value has no effect, if the multiple config option is set to false.
+	 * @type {Number|function}
+	 */
+	offsetBottom: 5,
 
 	/**
 	 * If the user scrolls past an emitter element,
