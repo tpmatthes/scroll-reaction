@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Example #6: multiple | scroll-reaction.js</title>
+
+		<link href="css/1.css" rel="stylesheet" />
+		<link href="css/6.css" rel="stylesheet" />
+	</head>
+	<body>
+		<nav>
+			<!-- The value of the data attribute should match the id of the element we want to target -->
+			<a href="#section-1" data-scroll-reaction>1</a>
+			<a href="#section-2" data-scroll-reaction>2</a>
+			<a href="#section-3" data-scroll-reaction>3</a>
+			<a href="#section-4" data-scroll-reaction>4</a>
+			<a href="#section-5" data-scroll-reaction>5</a>
+			<a href="#section-6" data-scroll-reaction>6</a>
+		</nav>
+
+		<header>
+			<div>
+				<h1>Example #6: multiple</h1>
+				Scroll down! Or resize your browser window
+			</div>
+		</header>
+
+		<section id="section-1">
+			<h2>#1</h2>
+		</section>
+
+		<section id="section-2">
+			<h2>#2</h2>
+		</section>
+
+		<section class="space">
+			<h2>Nothing</h2>
+		</section>
+
+		<section id="section-3">
+			<h2>#3</h2>
+		</section>
+
+		<section id="section-4">
+			<h2>#4</h2>
+		</section>
+
+		<section id="section-5">
+			<h2>#5</h2>
+		</section>
+
+		<section id="section-6">
+			<h2>#6</h2>
+		</section>
+
+		<!-- Scroll Reaction -->
+		<script src="../dist/scroll-reaction-with-polyfill.min.js" type="text/javascript"></script>
+		<script>
+			/**
+			 * It is useful to create a public variable,
+			 * if we want to use the ScrollReaction API later
+			 */
+			var reaction = new ScrollReaction({
+				// Configure the offset
+				offsetTop: 80,
+				offsetBottom: 40,
+				// Allow multiple active emitter elements
+				multiple: true
+			});
+		</script>
+	</body>
+</html>
