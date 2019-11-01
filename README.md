@@ -36,7 +36,7 @@ You probably don’t want to think about that, and you don’t want to pull in a
 
 ## Option 1: Browser
 
-Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.3.4/scroll-reaction.zip)
+Download it here: [scroll-reaction.min.js](https://github.com/tpmatthes/scroll-reaction/releases/download/v1.4.0/scroll-reaction.zip)
 
 Include the basic version in your HTML file:
 
