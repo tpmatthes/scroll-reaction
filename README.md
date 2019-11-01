@@ -4,15 +4,15 @@
 
 Highlight the current section in your navigation, hide your header on scroll or let elements appear with beautiful CSS transitions – it’s easy with _Scroll-Reaction.js_.
 
+_Scroll-Reaction.js_ adds data attributes to elements when other elements become visible (after scrolling). You just link them together. It is simple, but it makes many things possible.
+
 # Why do I need it?
 
-Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling, too.
+Let’s face it: We develop a lot of single page websites these days. Most of them need some sort of navigation, where the current section is highlighted. And they need smooth scrolling and animations, too.
 
-It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about many stress cases (e.g. unreachable sections, keyboard accessibility, reduced motion media query). And did I mention the perfomance issues of an un-throttled callback function?
+It can be a tedious task: It involves listening to scroll and resize events, updating DOM elements and thinking about many stress cases (e.g. unreachable sections, keyboard accessibility, browser support, reduced motion media query). And did I mention the perfomance issues of an un-throttled callback function?
 
-You probably don’t want to think about that, and you don’t want to pull in a huge library either.
-
-Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously easy scroll effects.
+You probably don’t want to think about that, and you don’t want to pull in a huge library either. Introducing _Scroll-Reaction.js_ – a tiny JavaScript library for ridiculously easy scroll effects.
 
 **Some benefits:**
 
@@ -109,7 +109,7 @@ It’s entirely up to you to add styling. _Scroll-Reaction.js_ only assigns attr
 
 ```css
 a[data-scroll-active] {
-  /* ... */
+  /* Styles for links to currently visible section */
 }
 ```
 
@@ -144,7 +144,9 @@ Include _Scroll-Reaction.js_:
 <script>
   var reaction = new ScrollReaction({
     // Never remove attributes
-    rewind: false
+    rewind: false,
+    // Animate all visible elements
+    multiple: true
   });
 </script>
 ```
@@ -205,7 +207,7 @@ You can pass a config object to the constructor function. These are the default 
 ```js
 var reaction = new ScrollReaction({
   /**
-   * Explanation of terms
+   * Explanation of terms:
    *
    * Listener elements can be registered
    * by adding custom data attributes, e.g.
@@ -217,18 +219,18 @@ var reaction = new ScrollReaction({
    * <section id="section-1">...</section>
    *
    * Scroll-Reaction.js works well with links,
-   * but it can handle any kind of HTML element
+   * but it can handle any kind of HTML element.
    * If there is no href attribute, you have to assign
    * a value to the data attribute, e.g.
    * <h1 data-scroll-reaction="section-1">...</h1>
    */
 
   /**
-   * This attribute is used to find listener elements
-   * By default the href page anchor (e.g. href="#test")
-   * will be used to identify emitter elements
+   * This attribute is used to find listener elements.
+   * By default the href page anchor (e.g. href="#...")
+   * will be used to identify emitter elements.
    * However, you can set this attribute to a valid id,
-   * if no href attribute exists
+   * if no href attribute exists.
    * @type {String}
    *
    * @example
@@ -239,74 +241,85 @@ var reaction = new ScrollReaction({
 
   /**
    * This attribute will be added to listener elements,
-   * if the user reaches an emitter element
+   * if the user reaches an emitter element.
    * If you pass an empty string or explicity set it to false,
-   * no attribute will be added
-   * It’s entirely up to you to add styling
-   * Example: a[data-scroll-active] { ... }
+   * no attribute will be added.
+   * It’s entirely up to you to add styling.
    * @type {String}
+   *
+   * @example
+   * a[data-scroll-active] { ... }
    */
   attributeCurrent: "data-scroll-active",
 
   /**
-   * This offset will be subtracted from the vertical position
-   * of any emitter element before calculating the current scroll position
-   * If your listener element should receive its attribute earlier,
-   * you should pass a (much) higher value
-   * @type {Number}
+   * By default only one emitter element can be active at any given time.
+   * This is always the latest element, which has been reached by the user.
+   * If this option is set to true, every visible emitter element will become active.
+   * @type {Boolean}
    */
-  offset: 5,
+  multiple: false,
 
   /**
-   * If you enable this option, the base offset
-   * will be calculated from the height of an element
-   * This option accepts any query selector, e.g. '#navigation' or 'nav'
-   * The first element, which matches the given selector, will be used
-   * If you use both offset options, the base offset will be added to this
-   * @type {String}
+   * Top offset for detecting emitter elements inside the viewport.
+   * If your listener element should receive its attribute earlier,
+   * you should pass a (much) higher value.
+   * If you want the offset to always match the height of an element,
+   * you can pass a function, that calculates the offset and returns a number.
+   * @type {Number|function}
    */
-  offsetFrom: "",
+  offsetTop: 5,
+
+  /**
+   * Bottom offset for detecting emitter elements inside the viewport.
+   * If your listener element should receive its attribute earlier,
+   * you should pass a (much) higher value.
+   * If you want the offset to always match the height of an element,
+   * you can pass a function, that calculates the offset and returns a number.
+   * This value has no effect, if the multiple config option is set to false.
+   * @type {Number|function}
+   */
+  offsetBottom: 5,
 
   /**
    * If the user scrolls past an emitter element,
-   * all linked listener elements will get a new attribute
+   * all linked listener elements will get a new attribute.
    * If the user scrolls back up or reaches another emitter element,
-   * existing attributes will be removed immediately
-   * Set this option to false to prevent removing of attributes
-   * This can be used to create one-off animations for appearing elements
+   * existing attributes will be removed immediately.
+   * Set this option to false to prevent removing of attributes.
+   * This can be used to create one-off animations for appearing elements.
    * @type {Boolean}
    */
   rewind: true,
 
   /**
    * Should smooth scrolling be enabled for all listener elements?
-   * Browser support is checked automatically, if set to 'auto'
+   * Browser support is checked automatically, if set to 'auto'.
    * If you use custom event listeners for your links,
-   * you probably want to disable this option (= false)
-   * Set this option to true, if you use your own polyfill
-   * The script can only check for native support, not for polyfills
-   * @type {Boolean}
+   * you probably want to disable this option (= false).
+   * Set this option to true, if you use your own polyfill.
+   * The script can only check for native support, not for polyfills.
+   * @type {Boolean|'auto'}
    */
   smoothScroll: "auto",
 
   /**
-   * The update method will get called at a limited rate on scroll
-   * By default it will get called 10 times per second
-   * This can limit the FPS in a custom update callback
-   * Feel free to change it to a lower value, if that's the case
+   * The update method will get called at a limited rate on scroll.
+   * By default it will get called 10 times per second.
+   * This can limit the FPS in a custom update callback.
+   * Feel free to change it to a lower value, if that's the case.
    * @type {Number}
    */
   throttleDelay: 100,
 
   /**
-   * The last emitter element may be "unreachable" on bigger screens
-   * Usually an emitter element is only triggered when the user scrolls past it
+   * The last emitter element may be "unreachable" on bigger screens.
+   * Usually an emitter element is only triggered when the user scrolls past it.
    * However, if the user scrolls to the bottom of the page,
-   * the last emitter element will be activated automatically
+   * the last emitter element will be activated automatically.
    * If linked listener elements should receive their attributes earlier,
-   * you should pass a (much) higher value
-   * Negative values (<0) will make the last emitter element unreachable
-   * Do you really want that?
+   * you should pass a (much) higher value.
+   * Negative values (<0) will make the last emitter element unreachable.
    * @type {Number}
    */
   windowBottomOffset: 20
@@ -332,12 +345,12 @@ var pixels = reaction.position; // e.g. 750
 var percentage = reaction.status + "%"; // e.g. 75%
 
 /**
- * Call this function on every update
- * This includes: scroll, resize and orientation change
+ * Call this function on every update.
+ * This includes: scroll, resize and orientation change.
  * In most cases, you don't need to register
- * your own event listeners for these events
+ * your own event listeners for these events.
  * Scroll-Reaction.js uses custom event listeners
- * with performance optimizations
+ * with performance optimizations.
  */
 reaction.on("update", function() {
   // Available variables (see above)
@@ -347,10 +360,10 @@ reaction.on("update", function() {
 
 /**
  * Call this function whenever the user clicks on a link
- * with a Scroll-Reaction.js data attribute (see config)
+ * with a Scroll-Reaction.js data attribute (see config).
  * If smoothScroll is explicity set to false,
- * Scroll-Reaction.js won't add event listeners to links
- * In that case you should register your own event listeners
+ * Scroll-Reaction.js won't add event listeners to links.
+ * In that case you can register your own event listeners.
  */
 reaction.on("click", function() {
   // Available variables (see above)
@@ -359,16 +372,16 @@ reaction.on("click", function() {
 });
 
 // If you add, reorder or delete emitter or listener elements,
-// you should refresh the cache
+// you should refresh the cache.
 reaction.refresh();
 
 // If you add elements or change their height,
-// you should update the position and the status
-// Otherwise they will update when the next scroll event occurs
+// you should update the position and the status.
+// Otherwise they will update when the next scroll event occurs.
 reaction.update();
 
 // You want the browser to scroll to a specific element?
-// Just pass the ID as an argument
+// Just pass the ID as an argument.
 reaction.scrollTo("my-id");
 
 // Scroll to top

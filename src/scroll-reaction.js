@@ -2,8 +2,8 @@ import defaultConfig from './default-config.js';
 import defer from './defer.js';
 
 /**
- * Constructor function for Scroll Reaction
- * It should be called when the DOM is ready (e.g. onload)
+ * Constructor function for Scroll Reaction.
+ * It should be called when the DOM is ready (e.g. onload).
  * @param {Object} userConfig Custom configuration
  * @return {Object}
  */
@@ -21,9 +21,9 @@ export default function(userConfig) {
 	var listeners = [];
 
 	/**
-	 * List of all available emitter elements
+	 * List of all available emitter elements.
 	 * Each emitter element has a unique ID,
-	 * so a "real" object is used for storing their data
+	 * so a "real" object is used for storing their data.
 	 * @type {Object}
 	 */
 	var emitters = {};
@@ -66,43 +66,47 @@ export default function(userConfig) {
 	var supportsSmoothScrolling = config.smoothScroll == 'auto' && 'scrollBehavior' in document.documentElement.style;
 
 	/**
-	 * Current scroll position in pixels
-	 * Global property, available inside event listeners
+	 * Current scroll position in pixels.
+	 * Global property, available inside event listeners.
 	 * @type {Number}
 	 */
 	this.position = 0;
 
 	/**
-	 * Current scroll position in percent (0-100)
-	 * Global property, available inside event listeners
+	 * Current scroll position in percent (0-100).
+	 * Global property, available inside event listeners.
 	 * @type {Number}
 	 */
 	this.status = 0;
 
 	/**
-	 * Initializes everything for the first usage
-	 * Updates emitter and listener elements for the first time
-	 * This method will be called automatically
+	 * Initializes everything for the first usage.
+	 * Updates emitter and listener elements for the first time.
+	 * This method will be called automatically.
 	 */
 	this.init = function() {
 		// Create fresh data for emitters and listeners
 		this.refresh();
 
-		// Update emitter and listener elements if the user changes the window size
-		// Usually the update method won't get called while resizing the window, but afterwards
-		// This prevents unnecessary function calls and improves the overall performance
+		/**
+		 * Update emitter and listener elements if the user changes the window size.
+		 * Usually the update method won't get called while resizing the window, but afterwards.
+		 * This prevents unnecessary function calls and improves the overall performance.
+		 */
 		window.addEventListener('resize', defer(this.update, this, 200, true));
 		window.addEventListener('orientationchange', defer(this.update, this, 200, true));
 
-		// Update emitter and listener elements if the user scrolls
-		// The update method will get called at a limited rate (X times per second)
-		// This prevents unnecessary function calls and improves the overall performance
+		/**
+		 * Update emitter and listener elements if the user scrolls.
+		 * The update method will get called at a limited rate (X times per second).
+		 * This prevents unnecessary function calls and improves the overall performance.
+		 */
 		window.addEventListener('scroll', defer(this.update, this, config.throttleDelay, false));
 	};
 
 	/**
-	 * Finds all listener and emitter elements in the DOM
-	 * Needs to be called again when emitter or listener elements
+	 * Finds all listener and emitter elements in the DOM.
+	 * Needs to be called again when emitter or listener elements.
 	 * are removed or added to the DOM
 	 */
 	this.refresh = function() {
@@ -120,28 +124,28 @@ export default function(userConfig) {
 				// Does the element have a href attribute and does it contain a page anchor?
 				var href = foundListeners[f].getAttribute('href');
 				var listenerHref = href && href.indexOf('#') == 0 ? href.replace('#', '') : '';
-				// Find the corresponding emitter element (by ID)
-				// If the href attribute is a page anchor,
-				// it will be used to find the emitter element
-				// Otherwise the configured attribute will be used
+				/**
+				 * Find the corresponding emitter element (by ID).
+				 * If the href attribute is a page anchor, it will be used to find the emitter element.
+				 * Otherwise the configured attribute will be used.
+				 */
 				var emitterId = listenerHref ? listenerHref : foundListeners[f].getAttribute(config.attribute);
 				var emitter = emitterId ? document.getElementById(emitterId) : null;
 
 				// Add an event listener for smooth scrolling
 				// A valid listener element or a scroll to top link is required
 				if (config.smoothScroll !== false && (listenerHref || href == '#')) {
-					// An existing emitter isn't required,
-					// because a "scroll to top" link should be possible
-					// In that case, an empty scroll reaction attribute is used
-					// e.g. <a href="#" data-scroll-reaction="">
-					// If the event listener is already defined on the object,
-					// it will not be added again (named function)
+					/**
+					 * An existing emitter isn't required, because a "scroll to top" link should be possible.
+					 * In that case, an empty scroll reaction attribute is used.
+					 * Example: <a href="#" data-scroll-reaction="">
+					 * If the event listener is already defined on the object, it will not be added again (named function)
+					 */
 					foundListeners[f].addEventListener('click', scrollSmoothly);
 				}
 
 				// Does the emitter element exist?
-				// Listener elements without linked emitter elements aren't allowed
-				// They would be useless
+				// Listener elements without linked emitter elements aren't allowed, they would be useles
 				if (emitter) {
 					// Create a new emitter object
 					// If the emitter is already known, it will be overriden
@@ -150,8 +154,7 @@ export default function(userConfig) {
 						active: false
 					};
 					// Add the listener object to the corresponding array
-					// It's possible to have multiple listener elements
-					// linked to the same emitter element
+					// It's possible to have multiple listener elements linked to the same emitter element
 					listeners.push({
 						element: foundListeners[f],
 						emitterId: emitterId
@@ -174,8 +177,7 @@ export default function(userConfig) {
 		// Include the offset for the bottom of the page
 		var bottomPosition = windowBottomPosition - config.windowBottomOffset;
 		// Reference to the last emitter element
-		// The list of emitter elements may be in random order
-		// We need to find the lowest emitter element
+		// The list of emitter elements may be in random order, we need to find the lowest emitter element
 		var lastEmitter = {
 			id: null,
 			position: -1
@@ -264,8 +266,8 @@ export default function(userConfig) {
 	};
 
 	/**
-	 * Scrolls to an element with a given ID
-	 * Scrolls to top, if no ID is specified
+	 * Scrolls to an element with a given ID.
+	 * Scrolls to top, if no ID is specified.
 	 * @param {String} id ID of the element the browser should scroll to [optional]
 	 */
 	this.scrollTo = function(id) {
@@ -319,8 +321,8 @@ export default function(userConfig) {
 	};
 
 	/**
-	 * Helper function: scroll smoothly, if the user clicks on a listener link
-	 * Needs to be called from an onclick event listener
+	 * Helper function: scroll smoothly, if the user clicks on a listener link.
+	 * Needs to be called from an onclick event listener.
 	 * @param {Object} event Automatically passed by the event listener
 	 */
 	var scrollSmoothly = function(event) {
@@ -339,10 +341,10 @@ export default function(userConfig) {
 	};
 
 	/**
-	 * Sets a callback with access to Scroll Reactions properties (via this)
-	 * Advanced scroll effects rely on multiple event listeners
-	 * Pass 'update' as the event name to call the callback on each update
-	 * Pass 'click' to call the callback whenever the user clicks on a smooth scroll link
+	 * Sets a callback with access to Scroll Reactions properties (via this).
+	 * Advanced scroll effects rely on multiple event listeners.
+	 * Pass 'update' as the event name to call the callback on each update.
+	 * Pass 'click' to call the callback whenever the user clicks on a smooth scroll link.
 	 * @param {String} name Name of the event, e.g. 'update' or 'click'
 	 * @param {Function} callback Function to be called
 	 */
@@ -358,8 +360,8 @@ export default function(userConfig) {
 	};
 
 	/**
-	 * Emits an event and calls linked event listeners
-	 * Used internally, e.g. in the update method
+	 * Emits an event and calls linked event listeners.
+	 * Used internally, e.g. in the update method.
 	 * @param {String} name Name of the event
 	 */
 	this.emit = function(name) {
